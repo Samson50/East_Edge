@@ -2,6 +2,7 @@ import pygame, sys, time
 from pygame.locals import *
 from images import *
 from characters import *
+from interaction import *
 from room_data import *
 
 class Display(object):
@@ -11,6 +12,7 @@ class Display(object):
         self.fade = pygame.image.load("surfaces/fade.png").convert()
         pygame.display.set_caption('Game')
         self.rooms = ROOMS
+
         ##====Menu Elements====##
         self.menu = pygame.image.load("sprites/decal/emblem.png")
         self.mouse = pygame.image.load("sprites/decal/mouse.png")
@@ -27,6 +29,11 @@ class Display(object):
         ##====Text Variables====##
         self.text = []; self.message = ["",""]; self.text_box = pygame.image.load("surfaces/textbox.png")
         self.font = pygame.font.Font(None, 20); self.message_marker = 0
+
+        ##===Decision/Cut Scene===##
+        self.decision_marker = 0; self.yes = pygame.image.load("sprites/decal/yes.png"); self.no = pygame.image.load("sprites/decal/no.png")
+        self.decision = pygame.image.load("sprites/decal/decision.png")
+        self.cut_scene_id = 0; self.cut_scene_counter = 0; self.cut_scene_active = False
 
         ##=====Dis is You======##
         self.cadet = Player(SpritePack(cadet_other),28,16)
@@ -61,9 +68,15 @@ class Display(object):
                 self.fade.set_alpha(self.fade_count)
             self.screen.blit(self.fade,(0,0))
 
-        if self.mode == "talking":
+        if self.mode == "talking" or self.mode == "decision":
             self.screen.blit(self.text_box,(10,200))
             self.draw_text()
+
+        if self.mode == "cut_scene":
+            if self.cut_scene_active:
+                self.cut_scene(cut_scenes[self.cut_scene_id])
+            else:
+                self.mode = "moving"
 
         pygame.display.update()
 
@@ -81,8 +94,17 @@ class Display(object):
             if buttons[pygame.K_UP] or buttons[pygame.K_DOWN] or buttons[pygame.K_LEFT] or buttons[pygame.K_RIGHT]:
                 self.move(buttons)
             else: self.pace = 0
+            ## MOVE NPCs
             for guy in self.room.non_player_characters:
-                guy.move()
+                guy.move("s")
+
+        if self.mode == "decision":
+            if buttons[pygame.K_RIGHT]:
+                self.decision_marker += 1
+            if buttons[pygame.K_LEFT]:
+                self.decision_marker -= 1
+            self.decision_marker = self.decision_marker%2
+            time.sleep(0.1)
 
         if ((self.cadet.x+139)/32+((self.cadet.y+139)/32)*self.width) in self.room.exits:
             self.mode = "changing_rooms"
@@ -142,31 +164,84 @@ class Display(object):
                     self.text = self.room.non_player_characters[i].interaction()
                     #self.update_message()
 
-        if self.mode == "talking":
+        if self.mode == "talking" or self.mode == "decision":
             self.update_message()
 
     def draw_text(self):
         delta = 0
-        for line in self.message:
-            text_object = self.font.render(line, 1, (0,0,0))
+        if (not "DCX" in self.message[1]):
+            for line in self.message:
+                text_object = self.font.render(line, 1, (0,0,0))
+                text_rect = text_object.get_rect()
+                text_rect.topleft = (30,210+delta)
+                delta += 20
+                self.screen.blit(text_object, text_rect)
+        else:
+            self.mode = "decision"
+            text_object = self.font.render(self.message[0], 1, (0,0,0))
             text_rect = text_object.get_rect()
-            text_rect.topleft = (30,210+delta)
-            delta += 20
+            text_rect.topleft = (30,210)
             self.screen.blit(text_object, text_rect)
+            self.screen.blit(self.yes,(56,225))
+            self.screen.blit(self.no, (160,225))
+            self.screen.blit(self.decision, (56+104*self.decision_marker,225))
 
     def update_message(self):
-        if (self.message_marker == len(self.text)):
-            self.message_marker = 0
-            self.mode = "moving"
-        elif (self.message_marker == len(self.text)-1):
-            self.message[0] = self.text[self.message_marker]
-            self.message[1] = ""
-            self.message_marker += 1
+        if ("DCX" in self.message[1]):
+            if ("CTS" in self.message[1]):
+                if self.decision_marker == 0:
+                    self.mode = "cut_scene"
+                    self.cut_scene_active = True
+                    self.cut_scene_counter = 0
+                    if self.message_marker >= len(self.text)-1:
+                        self.message_marker = 0
+                        self.message = ["",""]
+                else:
+                    self.message_marker = 0
+                    self.mode = "moving"
+            else:
+                if (self.message_marker == len(self.text)):
+                    self.message_marker = 0
+                    self.mode = "moving"
+                elif (self.message_marker == len(self.text)-1):
+                    self.message[0] = self.text[self.message_marker]
+                    self.message[1] = ""
+                    self.message_marker += 1
+                else:
+                    self.message[0] = self.text[self.message_marker]
+                    self.message_marker += 1
+                    self.message[1] = self.text[self.message_marker]
+                    self.message_marker += 1
         else:
-            self.message[0] = self.text[self.message_marker]
-            self.message_marker += 1
-            self.message[1] = self.text[self.message_marker]
-            self.message_marker += 1
+            if (self.message_marker == len(self.text)):
+                self.message_marker = 0
+                self.mode = "moving"
+            elif (self.message_marker == len(self.text)-1):
+                self.message[0] = self.text[self.message_marker]
+                self.message[1] = ""
+                self.message_marker += 1
+            else:
+                self.message[0] = self.text[self.message_marker]
+                self.message_marker += 1
+                self.message[1] = self.text[self.message_marker]
+                self.message_marker += 1
+
+    def cut_scene(self,directions):
+        step = directions[0][self.cut_scene_counter]
+        for action in step.split(" "):
+            if action[0] in ["0","1","2","3","4","5"]:
+                npc, direction = action.split(":")
+                self.room.non_player_characters[int(npc)].move(direction)
+
+        self.cut_scene_counter += 1
+
+        if self.cut_scene_counter >= len(directions[0]): #make 32 class variable
+            for clean_up in directions[1]:
+                self.room.actionable[clean_up[0]] = clean_up[2]
+                self.room.bounds.remove(clean_up[1])
+                self.room.bounds.append(clean_up[2])
+            self.cut_scene_active = False
+
 
     def run_menu(self):
         self.screen.fill((0,0,0))

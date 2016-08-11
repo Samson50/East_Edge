@@ -217,7 +217,7 @@ home_main = Room(pygame.image.load("surfaces/HOME_main.png"),
                  [0 ,1 ,2 ,3 ,4 ,5 ,6 ,7 ,8 ,9 ,10,11,12,
                   13,                                 25,
                   26,27,28,29,30,31,32,33,34,35,36,37,38,
-                  39,40,41,      44,45,46,            51,
+                  39,40,41,42,   44,45,46,            51,
                   52,               58,59,60,61,      64,
                   65,66,67,68,      71,72,            77,
                   78,                                 90,
@@ -230,7 +230,7 @@ home_main = Room(pygame.image.load("surfaces/HOME_main.png"),
                  [47],
                  [[120,6,12]],
                  [5],
-                 [],
-                 [])
+                 [mother_home],
+                 [42])
 
 ROOMS = [Mac_401, hallway, barracks1, m2_stairwell, m1_stairwell, home_room, home_main]

@@ -32,11 +32,13 @@ class Player:
         self.x = x
         self.y = y
         self.face = 0
+        self.pace = 0
 
-    def show(self, pose):
-        if pose == 0:
+    def show(self):
+        self.pace = self.pace%16
+        if self.pace == 0:
             return (self.sprites[(self.face*3)])
-        elif (pose < 8):
+        elif (self.pace < 8):
             return (self.sprites[(self.face*3+1)])
         else:
             return (self.sprites[self.face*3+2])
@@ -116,9 +118,9 @@ class NPC:
 
 
 default_text = ["This is the first line",
-                     "This is the second line",
-                     "This is the third line",
-                     "This is the last line"]
+                "This is the second line",
+                "This is the third line",
+                "This is the last line"]
 
 basic_blocker = NPC(SpritePack(cadet_other),32,64,["Sorry, bro.",
                                                    "You can't go this way yet."])

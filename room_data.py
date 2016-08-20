@@ -1,16 +1,10 @@
-# self.back = Image(roomData[0])
-# self.mid  = []
-# self.mid.append(Image(pic))
-# self.fore.append(Image(pic))
-# self.bounds = roomData[3]
-# self.NPCs = roomData[4]
-import pygame
+import pygame, sys
 from pygame.locals import *
 from characters import *
 
 #   when entering room [-44,-256,6,12]
 class Room:
-    def __init__(self,background,back_obj,fore_obj,bounds,exits,entrance,adjacent,non_player_characters,actionable):
+    def __init__(self,background,back_obj,fore_obj,bounds,exits,entrance,adjacent,non_player_characters,actionable,width):
         self.background = background
         self.back_obj = back_obj
         self.fore_obj = fore_obj
@@ -20,13 +14,125 @@ class Room:
         self.adjacent = adjacent
         self.non_player_characters = non_player_characters
         self.actionable = actionable
+        self.width = width
 
-    def change_rooms(self,x,y,width,ROOMS):
-        index = self.exits.index(((x+139)/32)+width*((y+139)/32))
+        ##== Externally Used Variables ==##
+        self.text = []
+
+    def change_rooms(self,x,y,ROOMS):
+        index = self.exits.index(((x+139)/32)+self.width*((y+139)/32))
         new_room = ROOMS[self.adjacent[index]]
         positions = self.entrance[index]
-        return  (new_room,positions[0],positions[1],positions[2])
+        return  (new_room,positions[0],positions[1])
 
+    def display(self, surface, cadet):
+
+        surface.fill((0,0,0))
+
+        surface.blit(self.background, (-cadet.x, -cadet.y+10))
+
+        for img in self.back_obj:
+            surface.blit(img[0], (img[1]-cadet.x, img[2]-cadet.y))
+
+        for cdt in self.non_player_characters:
+            surface.blit(cdt.show(),(cdt.x-cadet.x, cdt.y-cadet.y))
+
+        surface.blit(cadet.show(), (139, 131))
+
+        for img in self.fore_obj:
+            surface.blit(img[0], (img[1]-cadet.x, img[2]-cadet.y))
+
+        pygame.display.update()
+
+    def cheap_display(self, surface, cadet):
+        surface.blit(self.background, (-cadet.x, -cadet.y + 10))
+
+        for img in self.back_obj:
+            surface.blit(img[0], (img[1] - cadet.x, img[2] - cadet.y))
+
+        for cdt in self.non_player_characters:
+            surface.blit(cdt.show(), (cdt.x - cadet.x, cdt.y - cadet.y))
+
+        surface.blit(cadet.show(), (139, 131))
+
+        for img in self.fore_obj:
+            surface.blit(img[0], (img[1] - cadet.x, img[2] - cadet.y))
+
+        return surface
+
+
+    def getEvents(self, cadet):
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+
+            if event.type == KEYDOWN and event.key == K_f:
+                return self.action(cadet)
+
+        buttons = pygame.key.get_pressed()
+
+        if buttons[pygame.K_UP] or buttons[pygame.K_DOWN] or buttons[pygame.K_LEFT] or buttons[pygame.K_RIGHT]:
+            self.move(buttons, cadet)
+        else: cadet.pace = 0
+
+        if ((cadet.x+139)/32+((cadet.y+139)/32)*self.width) in self.exits:
+            return "Changing_Rooms"
+
+        return "Moving"
+
+    def move(self, buttons, cadet):
+        cadet.pace += 1
+        if (buttons[pygame.K_UP]):
+            cadet.move_up(self.width, self.bounds)
+
+        if (buttons[pygame.K_DOWN]):
+            cadet.move_down(self.width, self.bounds)
+
+        if (buttons[pygame.K_LEFT]):
+            cadet.move_left(self.width, self.bounds)
+
+        if (buttons[pygame.K_RIGHT]):
+            cadet.move_right(self.width, self.bounds)
+
+    def action(self, cadet):
+        X = (cadet.x + 149) / 32
+        Y = (cadet.y + 145) / 32
+        if cadet.face == 0:
+            if (X + (Y - 1) * self.width) in self.actionable:
+                i = self.actionable.index(X + (Y - 1) * self.width)
+                self.non_player_characters[i].look_at(cadet.face)
+                self.text = self.non_player_characters[i].interaction()
+                return "Talking"
+            else:
+                return "Moving"
+
+        elif cadet.face == 1:
+            if (X + (Y + 1) * self.width) in self.actionable:
+                i = self.actionable.index(X + (Y + 1) * self.width)
+                self.non_player_characters[i].look_at(cadet.face)
+                self.text = self.non_player_characters[i].interaction()
+                return "Talking"
+            else:
+                return "Moving"
+
+        elif cadet.face == 2:
+            if (X - 1 + Y * self.width) in self.actionable:
+                i = self.actionable.index(X - 1 + Y * self.width)
+                self.non_player_characters[i].look_at(cadet.face)
+                self.text = self.non_player_characters[i].interaction()
+                return "Talking"
+            else:
+                return "Moving"
+
+        else:
+            if (X + 1 + Y * self.width) in self.actionable:
+                i = self.actionable.index(X + 1 + Y * self.width)
+                self.non_player_characters[i].look_at(cadet.face)
+                self.text = self.non_player_characters[i].interaction()
+                return "Talking"
+            else:
+                return "Moving"
 
 hallway = Room(pygame.image.load("surfaces/CADET_hall.png"),
            [[pygame.image.load("sprites/objects/CADET_door.png"),0,198],
@@ -56,7 +162,8 @@ hallway = Room(pygame.image.load("surfaces/CADET_hall.png"),
            [[54,262,9],[-74,262,9],[-104,22,6]],
            [0,2,3],     #next room index
            [NPC(SpritePack(cadet_other),34,94,default_text)],
-           [19])
+           [19],
+            6)
 
 barracks0 = Room(pygame.image.load("surfaces/CADET_room_a.png"),
            [[pygame.image.load("sprites/objects/CADET_desk.png"),31,92],
@@ -89,7 +196,8 @@ barracks0 = Room(pygame.image.load("surfaces/CADET_room_a.png"),
             [[-104,54,6]],
             [1],    #next room index
             [NPC(SpritePack(cadet_other),34,128,default_text)],
-             [37])
+            [37],
+             9)
 
 barracks1 = Room(pygame.image.load("surfaces/CADET_room_b.png"),
            [[pygame.image.load("sprites/objects/CADET_desk.png"),31,92],
@@ -118,7 +226,8 @@ barracks1 = Room(pygame.image.load("surfaces/CADET_room_b.png"),
             [[-104,342,6]],
             [1],    #next room index
             [NPC(SpritePack(cadet_other),34,128,default_text)],
-             [37])
+             [37],
+              9)
 
 m1_stairwell = Room(pygame.image.load("surfaces/CADET_stairwell_ground.png"),
              [[pygame.image.load("sprites/decal/M1.png"),62,150]],
@@ -135,7 +244,8 @@ m1_stairwell = Room(pygame.image.load("surfaces/CADET_stairwell_ground.png"),
              [[-10,-42,6]],
              [3],
              [],
-             [])
+             [],
+              6)
 
 m2_stairwell = Room(pygame.image.load("surfaces/CADET_stairwell_working.png"),
              [[pygame.image.load("sprites/decal/M2.png"),62,150]],
@@ -152,7 +262,8 @@ m2_stairwell = Room(pygame.image.load("surfaces/CADET_stairwell_working.png"),
              [[20,-10,6],[-106,-42,6]],
              [1,4],
              [basic_blocker],
-             [13])
+             [13],
+              6)
 
 Mac_401 = Room(pygame.image.load("surfaces/CADET_room_a.png"),
            [[pygame.image.load("sprites/objects/CADET_desk.png"),31,92],
@@ -185,7 +296,8 @@ Mac_401 = Room(pygame.image.load("surfaces/CADET_room_a.png"),
             [[-104,54,6]],
             [1],    #next room index
             [NPC(SpritePack(cadet_other),34,128,default_text)],
-             [37])
+            [37],
+             9)
 
 home_room = Room(pygame.image.load("surfaces/HOME_room.png"),
                  [[pygame.image.load("sprites/objects/HOME_bed.png"),288,256],
@@ -208,17 +320,18 @@ home_room = Room(pygame.image.load("surfaces/HOME_room.png"),
                  [[176,-42,13]],
                  [6],
                  [],
-                 [])
+                 [],
+                 12)
 
 home_main = Room(pygame.image.load("surfaces/HOME_main.png"),
-                 [],
+                 [[pygame.image.load("sprites/objects/box.png"),96,136]],
                  [[pygame.image.load("sprites/objects/HOME_table.png"),96,256],
                   [pygame.image.load("sprites/objects/HOME_counter.png"),32,160]],
                  [0 ,1 ,2 ,3 ,4 ,5 ,6 ,7 ,8 ,9 ,10,11,12,
                   13,                                 25,
                   26,27,28,29,30,31,32,33,34,35,36,37,38,
                   39,40,41,42,   44,45,46,            51,
-                  52,               58,59,60,61,      64,
+                  52,      55,      58,59,60,61,      64,
                   65,66,67,68,      71,72,            77,
                   78,                                 90,
                   91,                                 103,
@@ -231,6 +344,7 @@ home_main = Room(pygame.image.load("surfaces/HOME_main.png"),
                  [[120,6,12]],
                  [5],
                  [mother_home],
-                 [42])
+                 [42],
+                  13)
 
 ROOMS = [Mac_401, hallway, barracks1, m2_stairwell, m1_stairwell, home_room, home_main]

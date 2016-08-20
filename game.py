@@ -1,5 +1,6 @@
 import pygame, sys, random
 from pygame.locals import *
+from menu import *
 from characters import *
 from images import *
 from display import *
@@ -13,18 +14,79 @@ class Controller(object):
         self.fpsClock = pygame.time.Clock()
         self.FPS = (70)
         self.mode = "Menu"
+        self.text_box = TextBox(self.surface)
+        self.menu = Menu(self.surface)
+        self.cadet = Player(SpritePack(cadet_other),28,16)
+        self.rooms = ROOMS
+        self.room = ROOMS[0]
+        self.width = 0
+        self.fade_count = 0
+        self.fade = pygame.image.load("surfaces/fade.png").convert()
+        self.cut_scene_counter = 0
 
     def run(self):
         while True:
-            while self.mode == "Play":
-                self.display.getEvents()
-                self.display.display()
+            while self.mode == "Moving":
+                self.mode = self.room.getEvents(self.cadet)
+                self.room.display(self.surface, self.cadet)
                 self.fpsClock.tick(self.FPS)
 
             while self.mode == "Menu":
-                self.mode = self.display.run_menu()
-                if self.mode == "Play":
-                    self.display.start_game()
+                self.mode = self.menu.run()
+                if self.mode == "Moving":
+                    (self.room, self.cadet.x, self.cadet.y) = self.menu.start_game()
+                self.fpsClock.tick(self.FPS)
+
+            while self.mode == "Changing_Rooms":
+                self.fade_count += 5
+                if (self.fade_count < 255):
+                    self.fade.set_alpha(self.fade_count)
+                elif (self.fade_count == 255):
+                    (self.room, self.cadet.x, self.cadet.y) = self.room.change_rooms(self.cadet.x, self.cadet.y, self.rooms)
+                elif (self.fade_count > 255 and self.fade_count < 510):
+                    self.fade.set_alpha(510 - self.fade_count)
+                else:
+                    self.mode = "Moving"
+                    self.fade_count = 0
+                self.surface = self.room.cheap_display(self.surface, self.cadet)
+                self.surface.blit(self.fade, (0, 0))
+
+                pygame.display.update()
+                self.fpsClock.tick(self.FPS)
+
+            if self.mode == "Talking":
+                self.text_box.message = [self.room.text[0],self.room.text[1]]
+                self.text_box.message_marker = 2
+            while self.mode == "Talking":
+                self.mode = self.text_box.getEvents(self.room.text)
+                self.text_box.draw_text(self.surface)
+                self.fpsClock.tick(self.FPS)
+
+            if self.mode == "Cut_Scene":
+                directions = cut_scenes[int(self.room.text[-1].split(" ")[2])]
+                self.cut_scene_counter = 0
+            while self.mode == "Cut_Scene":
+                step = directions[0][self.cut_scene_counter]
+                for action in step.split(" "):
+                    if action[0] in ["0", "1", "2", "3", "4", "5"]:
+                        npc, direction = action.split(":")
+                        self.room.non_player_characters[int(npc)].move(direction)
+                    if (action[0] == 'C'):
+                        print "working"
+
+                self.cut_scene_counter += 1
+
+                if self.cut_scene_counter >= len(directions[0]):  # make 32 class variable
+                    for clean_up in directions[1]:
+                        self.room.actionable[clean_up[0]] = clean_up[2]
+                        self.room.bounds.remove(clean_up[1])
+                        self.room.bounds.append(clean_up[2])
+                    self.mode = "Moving"
+
+                self.surface = self.room.cheap_display(self.surface, self.cadet)
+                pygame.display.update()
+
+                self.fpsClock.tick(self.FPS)
 
 
 

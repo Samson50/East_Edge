@@ -7,12 +7,14 @@ class Menu:
         self.surface = surface
         self.menu = pygame.image.load("sprites/decal/emblem.png")
         self.play_button = pygame.image.load("sprites/decal/play_button.png")
+        self.logo = pygame.image.load("sprites/decal/game_menu.png")
 
     def run(self):
         self.surface.fill((0,0,0))
 
         self.surface.blit(self.menu, (2, 16))
-        self.surface.blit(self.play_button, (25,225))
+        self.surface.blit(self.logo, (0,0))
+        self.surface.blit(self.play_button, (20,230))
 
         (mouse_x, mouse_y) = pygame.mouse.get_pos()
         pygame.display.update()
@@ -24,7 +26,7 @@ class Menu:
 
 
         if pygame.mouse.get_pressed()[0]:
-            if mouse_x > 25 and mouse_x < 125 and mouse_y > 225 and mouse_y < 275:
+            if mouse_x > 20 and mouse_x < 120 and mouse_y > 230 and mouse_y < 280:
                 return "Moving"
             else:
                 return "Menu"

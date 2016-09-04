@@ -37,10 +37,12 @@ class Room:
         for cdt in self.non_player_characters:
             surface.blit(cdt.show(),(cdt.x-cadet.x, cdt.y-cadet.y))
 
-        surface.blit(cadet.show(), (139, 131))
+        cadet.show(surface)
 
         for img in self.fore_obj:
             surface.blit(img[0], (img[1]-cadet.x, img[2]-cadet.y))
+
+        cadet.status(surface)
 
         pygame.display.update()
 
@@ -53,7 +55,7 @@ class Room:
         for cdt in self.non_player_characters:
             surface.blit(cdt.show(), (cdt.x - cadet.x, cdt.y - cadet.y))
 
-        surface.blit(cadet.show(), (139, 131))
+        cadet.show(surface)
 
         for img in self.fore_obj:
             surface.blit(img[0], (img[1] - cadet.x, img[2] - cadet.y))
@@ -326,7 +328,8 @@ home_room = Room(pygame.image.load("surfaces/HOME_room.png"),
 home_main = Room(pygame.image.load("surfaces/HOME_main.png"),
                  [[pygame.image.load("sprites/objects/box.png"),96,136]],
                  [[pygame.image.load("sprites/objects/HOME_table.png"),96,256],
-                  [pygame.image.load("sprites/objects/HOME_counter.png"),32,160]],
+                  [pygame.image.load("sprites/objects/HOME_counter.png"),32,160],
+                  [pygame.image.load("sprites/objects/stair_bit.png"),279,111]],
                  [0 ,1 ,2 ,3 ,4 ,5 ,6 ,7 ,8 ,9 ,10,11,12,
                   13,                                 25,
                   26,27,28,29,30,31,32,33,34,35,36,37,38,

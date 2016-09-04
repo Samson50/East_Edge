@@ -71,8 +71,38 @@ class Controller(object):
                     if action[0] in ["0", "1", "2", "3", "4", "5"]:
                         npc, direction = action.split(":")
                         self.room.non_player_characters[int(npc)].move(direction)
+                    ##== Change Rooms ==##
                     if (action[0] == 'C'):
-                        print "working"
+                        change = action.split(":")
+                        while(self.fade_count < 510):
+                            self.fade_count += 5
+                            if (self.fade_count < 255):
+                                self.fade.set_alpha(self.fade_count)
+                            elif (self.fade_count == 255):
+                                self.room = self.rooms[int(change[1])]
+                                self.cadet.x = int(change[2])
+                                self.cadet.y = int(change[3])
+                            elif (self.fade_count > 255 and self.fade_count < 510):
+                                self.fade.set_alpha(510 - self.fade_count)
+                            else:
+                                cut_change = False
+                            self.surface = self.room.cheap_display(self.surface, self.cadet)
+                            self.surface.blit(self.fade, (0, 0))
+
+                            pygame.display.update()
+                            self.fpsClock.tick(self.FPS)
+
+                        self.fade_count = 0
+
+                    ##== Do Things with Objects ==##
+                    if (action[0] == 'O'):
+                        stuff = action.split(":")
+                        if action[1] == 'F':
+                            if action[2] == 'R':
+                                del self.room.fore_obj[(int(stuff[1]))]
+
+                        #if action[1] == 'B':
+
 
                 self.cut_scene_counter += 1
 

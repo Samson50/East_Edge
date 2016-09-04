@@ -28,20 +28,24 @@ class SpritePack:
 class Player:
     def __init__(self, spritePack, x, y):
         self.sprites = spritePack
+        self.status_bar = pygame.image.load("sprites/status/status_bar.png")
         self.health = 100
         self.x = x
         self.y = y
         self.face = 0
         self.pace = 0
 
-    def show(self):
+    def status(self, surface):
+        surface.blit(self.status_bar, (0, 0))
+
+    def show(self, surface):
         self.pace = self.pace%16
         if self.pace == 0:
-            return (self.sprites[(self.face*3)])
+            surface.blit((self.sprites[(self.face*3)]),(139, 131))
         elif (self.pace < 8):
-            return (self.sprites[(self.face*3+1)])
+            surface.blit((self.sprites[(self.face*3+1)]),(139, 131))
         else:
-            return (self.sprites[self.face*3+2])
+            surface.blit((self.sprites[self.face*3+2]), (139, 131))
 
     def move_up(self, width, bounds):
         self.face = 0

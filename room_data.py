@@ -63,14 +63,14 @@ class Room:
         return surface
 
 
-    def getEvents(self, cadet):
+    def getEvents(self, cadet, text_box, fpsClock, FPS, surface):
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
 
             if event.type == KEYDOWN and event.key == K_f:
-                return self.action(cadet)
+                return self.action(cadet,text_box, fpsClock, FPS, surface)
 
         buttons = pygame.key.get_pressed()
 
@@ -84,6 +84,8 @@ class Room:
         return "Moving"
 
     def move(self, buttons, cadet):
+        print cadet.x
+        print cadet.y
         cadet.pace += 1
         if (buttons[pygame.K_UP]):
             cadet.move_up(self.width, self.bounds)
@@ -97,15 +99,14 @@ class Room:
         if (buttons[pygame.K_RIGHT]):
             cadet.move_right(self.width, self.bounds)
 
-    def action(self, cadet):
+    def action(self, cadet, text_box, fpsClock, FPS, surface):
         X = (cadet.x + 149) / 32
         Y = (cadet.y + 145) / 32
         if cadet.face == 0:
             if (X + (Y - 1) * self.width) in self.actionable:
                 i = self.actionable.index(X + (Y - 1) * self.width)
                 self.non_player_characters[i].look_at(cadet.face)
-                self.text = self.non_player_characters[i].interaction()
-                return "Talking"
+                return self.non_player_characters[i].talk_to(text_box, fpsClock, FPS, surface)
             else:
                 return "Moving"
 
@@ -113,8 +114,7 @@ class Room:
             if (X + (Y + 1) * self.width) in self.actionable:
                 i = self.actionable.index(X + (Y + 1) * self.width)
                 self.non_player_characters[i].look_at(cadet.face)
-                self.text = self.non_player_characters[i].interaction()
-                return "Talking"
+                return self.non_player_characters[i].talk_to(text_box, fpsClock, FPS, surface)
             else:
                 return "Moving"
 
@@ -122,8 +122,7 @@ class Room:
             if (X - 1 + Y * self.width) in self.actionable:
                 i = self.actionable.index(X - 1 + Y * self.width)
                 self.non_player_characters[i].look_at(cadet.face)
-                self.text = self.non_player_characters[i].interaction()
-                return "Talking"
+                return self.non_player_characters[i].talk_to(text_box, fpsClock, FPS, surface)
             else:
                 return "Moving"
 
@@ -131,8 +130,7 @@ class Room:
             if (X + 1 + Y * self.width) in self.actionable:
                 i = self.actionable.index(X + 1 + Y * self.width)
                 self.non_player_characters[i].look_at(cadet.face)
-                self.text = self.non_player_characters[i].interaction()
-                return "Talking"
+                return self.non_player_characters[i].talk_to(text_box, fpsClock, FPS, surface)
             else:
                 return "Moving"
 
@@ -350,4 +348,28 @@ home_main = Room(pygame.image.load("surfaces/HOME_main.png"),
                  [42],
                   13)
 
-ROOMS = [Mac_401, hallway, barracks1, m2_stairwell, m1_stairwell, home_room, home_main]
+sally_port = Room(pygame.image.load("surfaces/sally_port.png"),
+                  [],
+                  [],
+                  [0  ,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12 ,13, 14, 15, 16,
+                    18,                                                             34,
+                    36,                                                             52,
+                    54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70,
+                    72, 73, 74,                                             86, 87, 88,
+                    90,     92, 93,                                    103,104,    106,
+                   108,    110,111,                                    121,122,    124,
+                   126,    128,129,                                    139,140,    142,
+                   144,    146,147,                                    157,158,    160,
+                   162,    164,165,                                    175,176,    178,
+                   180,    182,183,                                    193,194,    196,
+                   198,    200,201,                                    211,212,    214,
+                   216,    218,                                            230,    232,
+                   234,    236,237,238,239,240,241,242,243,244,245,246,247,248,249,250],
+                  [62],
+                  [[-54,56,6]],
+                  [4],
+                  [cadet_000],
+                  [62],
+                  18)
+
+ROOMS = [Mac_401, hallway, barracks1, m2_stairwell, m1_stairwell, home_room, home_main, sally_port]

@@ -11,19 +11,15 @@ class Menu:
 
     def run(self):
         self.surface.fill((0,0,0))
-
         self.surface.blit(self.menu, (2, 16))
         self.surface.blit(self.logo, (0,0))
         self.surface.blit(self.play_button, (20,230))
-
         (mouse_x, mouse_y) = pygame.mouse.get_pos()
         pygame.display.update()
-
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
-
 
         if pygame.mouse.get_pressed()[0]:
             if mouse_x > 20 and mouse_x < 120 and mouse_y > 230 and mouse_y < 280:
@@ -37,4 +33,4 @@ class Menu:
         #self.room = home_main
         #self.width = 13 #self.cadet.x = 0; self.cadet.y = 32
         # return room, x, and y
-        return (home_main, 0, 32)
+        return (sally_port, 160, 160)

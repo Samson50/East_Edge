@@ -1,20 +1,21 @@
-import pygame, sys, random
+import pygame, sys, random, story
 from pygame.locals import *
 from menu import *
+from interaction import *
 from characters import *
 from images import *
-from display import *
 
-
+fpsClock = pygame.time.Clock()
+FPS = 70
+##surface = pygame.display.set_mode((300,300))
 
 class Controller(object):
     def __init__(self):
         self.surface = pygame.display.set_mode((300,300))
-        self.display = Display(self.surface)
-        self.fpsClock = pygame.time.Clock()
-        self.FPS = (70)
+        #self.fpsClock = pygame.time.Clock()
+        #self.FPS = (70)
         self.mode = "Menu"
-        self.text_box = TextBox(self.surface)
+        self.text_box = TextBox()
         self.menu = Menu(self.surface)
         self.cadet = Player(SpritePack(cadet_other),28,16)
         self.rooms = ROOMS
@@ -27,15 +28,15 @@ class Controller(object):
     def run(self):
         while True:
             while self.mode == "Moving":
-                self.mode = self.room.getEvents(self.cadet)
+                self.mode = self.room.getEvents(self.cadet, self.text_box, fpsClock, FPS, self.surface)
                 self.room.display(self.surface, self.cadet)
-                self.fpsClock.tick(self.FPS)
+                fpsClock.tick(FPS)
 
             while self.mode == "Menu":
                 self.mode = self.menu.run()
                 if self.mode == "Moving":
                     (self.room, self.cadet.x, self.cadet.y) = self.menu.start_game()
-                self.fpsClock.tick(self.FPS)
+                fpsClock.tick(FPS)
 
             while self.mode == "Changing_Rooms":
                 self.fade_count += 5
@@ -52,22 +53,27 @@ class Controller(object):
                 self.surface.blit(self.fade, (0, 0))
 
                 pygame.display.update()
-                self.fpsClock.tick(self.FPS)
-
-            if self.mode == "Talking":
-                self.text_box.message = [self.room.text[0],self.room.text[1]]
-                self.text_box.message_marker = 2
-            while self.mode == "Talking":
-                self.mode = self.text_box.getEvents(self.room.text)
-                self.text_box.draw_text(self.surface)
-                self.fpsClock.tick(self.FPS)
+                fpsClock.tick(FPS)
 
             if self.mode == "Cut_Scene":
-                directions = cut_scenes[int(self.room.text[-1].split(" ")[2])]
+                directions = cut_scenes[story.current_scene]
                 self.cut_scene_counter = 0
             while self.mode == "Cut_Scene":
                 step = directions[0][self.cut_scene_counter]
                 for action in step.split(" "):
+                    if action[0] == 'N':
+                        change = action.split(":")
+                        ## Move action
+                        self.room.actionable[self.room.actionable.index(int(change[1]))] = int(change[2])
+                        ## Move bound
+                        del self.room.bounds[self.room.bounds.index(int(change[1]))]
+                        self.room.bounds.append(int(change[2]))
+                    if action[0] == 'M':
+                        d = action.split(":")[1]
+                        if (d == "d"): self.cadet.move_down(self.room.width, self.room.bounds)
+                        elif (d == "u"): self.cadet.move_up(self.room.width, self.room.bounds)
+                        elif (d == "r"): self.cadet.move_right(self.room.width, self.room.bounds)
+                        elif (d == "l"): self.cadet.move_left(self.room.width, self.room.bounds)
                     if action[0] in ["0", "1", "2", "3", "4", "5"]:
                         npc, direction = action.split(":")
                         self.room.non_player_characters[int(npc)].move(direction)
@@ -90,7 +96,7 @@ class Controller(object):
                             self.surface.blit(self.fade, (0, 0))
 
                             pygame.display.update()
-                            self.fpsClock.tick(self.FPS)
+                            fpsClock.tick(FPS)
 
                         self.fade_count = 0
 
@@ -116,7 +122,7 @@ class Controller(object):
                 self.surface = self.room.cheap_display(self.surface, self.cadet)
                 pygame.display.update()
 
-                self.fpsClock.tick(self.FPS)
+                fpsClock.tick(FPS)
 
 
 

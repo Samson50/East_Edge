@@ -131,6 +131,7 @@ class NPC:
         return mode
 
     def look_at(self,face):
+        self.pose = 0
         if face == 0: self.face  = 1
         elif face == 1: self.face = 0
         elif face == 2: self.face = 3

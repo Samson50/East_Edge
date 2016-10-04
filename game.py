@@ -61,6 +61,8 @@ class Controller(object):
             while self.mode == "Cut_Scene":
                 step = directions[0][self.cut_scene_counter]
                 for action in step.split(" "):
+
+                    ##== Move NPC Action ==##
                     if action[0] == 'N':
                         change = action.split(":")
                         ## Move action
@@ -68,15 +70,23 @@ class Controller(object):
                         ## Move bound
                         del self.room.bounds[self.room.bounds.index(int(change[1]))]
                         self.room.bounds.append(int(change[2]))
+
+                    ##== Move Player ==##
                     if action[0] == 'M':
                         d = action.split(":")[1]
                         if (d == "d"): self.cadet.move_down(self.room.width, self.room.bounds)
                         elif (d == "u"): self.cadet.move_up(self.room.width, self.room.bounds)
                         elif (d == "r"): self.cadet.move_right(self.room.width, self.room.bounds)
                         elif (d == "l"): self.cadet.move_left(self.room.width, self.room.bounds)
+
+                    ##== Move NPC ==##
                     if action[0] in ["0", "1", "2", "3", "4", "5"]:
-                        npc, direction = action.split(":")
-                        self.room.non_player_characters[int(npc)].move(direction)
+                        direction = action.split(":")
+                        if (direction[1] == 'r' or direction[1] == 'l' or direction[1] == 'u' or direction[1] == 'd'):
+                            self.room.non_player_characters[int(direction[0])].move(direction[1])
+                        if (direction[1] == 'l'):
+                            self.room.non_player_characters[int(direction[0])].look_at(int(direction[2]))
+
                     ##== Change Rooms ==##
                     if (action[0] == 'C'):
                         change = action.split(":")

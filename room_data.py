@@ -60,6 +60,8 @@ class Room:
         for img in self.fore_obj:
             surface.blit(img[0], (img[1] - cadet.x, img[2] - cadet.y))
 
+        cadet.status(surface)
+
         return surface
 
 
@@ -106,6 +108,8 @@ class Room:
             if (X + (Y - 1) * self.width) in self.actionable:
                 i = self.actionable.index(X + (Y - 1) * self.width)
                 self.non_player_characters[i].look_at(cadet.face)
+                surface = self.cheap_display(surface, cadet)
+                pygame.display.update()
                 return self.non_player_characters[i].talk_to(text_box, fpsClock, FPS, surface)
             else:
                 return "Moving"
@@ -114,6 +118,8 @@ class Room:
             if (X + (Y + 1) * self.width) in self.actionable:
                 i = self.actionable.index(X + (Y + 1) * self.width)
                 self.non_player_characters[i].look_at(cadet.face)
+                surface = self.cheap_display(surface, cadet)
+                pygame.display.update()
                 return self.non_player_characters[i].talk_to(text_box, fpsClock, FPS, surface)
             else:
                 return "Moving"
@@ -122,6 +128,8 @@ class Room:
             if (X - 1 + Y * self.width) in self.actionable:
                 i = self.actionable.index(X - 1 + Y * self.width)
                 self.non_player_characters[i].look_at(cadet.face)
+                surface = self.cheap_display(surface, cadet)
+                pygame.display.update()
                 return self.non_player_characters[i].talk_to(text_box, fpsClock, FPS, surface)
             else:
                 return "Moving"
@@ -130,6 +138,8 @@ class Room:
             if (X + 1 + Y * self.width) in self.actionable:
                 i = self.actionable.index(X + 1 + Y * self.width)
                 self.non_player_characters[i].look_at(cadet.face)
+                surface = self.cheap_display(surface, cadet)
+                pygame.display.update()
                 return self.non_player_characters[i].talk_to(text_box, fpsClock, FPS, surface)
             else:
                 return "Moving"

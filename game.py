@@ -84,7 +84,7 @@ class Controller(object):
                         direction = action.split(":")
                         if (direction[1] == 'r' or direction[1] == 'l' or direction[1] == 'u' or direction[1] == 'd'):
                             self.room.non_player_characters[int(direction[0])].move(direction[1])
-                        if (direction[1] == 'l'):
+                        if (direction[1] == 'f'):
                             self.room.non_player_characters[int(direction[0])].look_at(int(direction[2]))
 
                     ##== Change Rooms ==##

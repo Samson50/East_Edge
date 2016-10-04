@@ -69,7 +69,7 @@ class Player:
         if ((self.x+2+167)/32+((self.y+167)/32)*width) not in bounds and ((self.x+2+167)/32+((self.y+139)/32)*width) not in bounds:
             self.x += 2
 
-
+# TODO: Add Current_TEXT int and next_TEXT list
 class NPC:
     def __init__(self, spritePack, x, y, text_block):
         self.sprites = spritePack
@@ -121,14 +121,17 @@ class NPC:
         return self.text
 
     def talk_to(self, text_box, fpsClock, FPS, surface):
-        text_box.message = [self.text_block.text[0], self.text_block.text[1], self.text_block.text[2], self.text_block.text[3]]
-        text_box.message_marker = 4
-        mode = "Talking"
-        while (mode=="Talking"):
-            mode = text_box.getEvents(self.text_block)
-            text_box.draw_text(surface, self.text_block)
-            fpsClock.tick(FPS)
-        return mode
+        if (story.decisions[self.text_block.result] == -1):
+            text_box.message = [self.text_block.text[0], self.text_block.text[1], self.text_block.text[2], self.text_block.text[3]]
+            text_box.message_marker = 4
+            mode = "Talking"
+            while (mode=="Talking"):
+                mode = text_box.getEvents(self.text_block)
+                text_box.draw_text(surface, self.text_block)
+                fpsClock.tick(FPS)
+            return mode
+        else:
+            return "Moving"
 
     def look_at(self,face):
         self.pose = 0

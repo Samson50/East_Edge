@@ -121,17 +121,16 @@ class NPC:
         return self.text
 
     def talk_to(self, text_box, fpsClock, FPS, surface):
-        if (story.decisions[self.text_block.result] == -1):
-            text_box.message = [self.text_block.text[0], self.text_block.text[1], self.text_block.text[2], self.text_block.text[3]]
-            text_box.message_marker = 4
-            mode = "Talking"
-            while (mode=="Talking"):
-                mode = text_box.getEvents(self.text_block)
-                text_box.draw_text(surface, self.text_block)
-                fpsClock.tick(FPS)
-            return mode
-        else:
-            return "Moving"
+        if (story.decisions[self.text_block.result] != -1):
+            self.text_block = self.text_block.next_text[story.decisions[self.text_block.result]]
+        text_box.message = [self.text_block.text[0], self.text_block.text[1], self.text_block.text[2], self.text_block.text[3]]
+        text_box.message_marker = 4
+        mode = "Talking"
+        while (mode=="Talking"):
+            mode = text_box.getEvents(self.text_block)
+            text_box.draw_text(surface, self.text_block)
+            fpsClock.tick(FPS)
+        return mode
 
     def look_at(self,face):
         self.pose = 0
@@ -164,10 +163,11 @@ text_000    = ["Jake! There are some serious regs",
                ""]
 
 class Text_Block:
-    def __init__(self, text, choices, result):
+    def __init__(self, text, choices, result, next_text):
         self.text = text
         self.choices = choices
         self.result = result
+        self.next_text = next_text
 
 basic_blocker = NPC(SpritePack(cadet_other),32,64,["Sorry, bro.",
                                                    "You can't go this way yet.",
@@ -178,5 +178,7 @@ mother_home = NPC(SpritePack(mother),96,96,["Hey, Jake",
                                             "Are you excited?",
                                             "Ready to go to West Point?",
                                             "DCX CTS 000"])
+text_D = ["What?","What do you still want?","",""]
+empty_res = Text_Block(text_D,[],-1,[])
 
-cadet_000 = NPC(SpritePack(cadet_other),258,96,Text_Block(text_000,choice_0,0))
+cadet_000 = NPC(SpritePack(cadet_other),258,96,Text_Block(text_000,choice_0,0,[empty_res,empty_res,empty_res,empty_res]))

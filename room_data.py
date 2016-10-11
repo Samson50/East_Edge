@@ -35,9 +35,12 @@ class Room:
             surface.blit(img[0], (img[1]-cadet.x, img[2]-cadet.y))
 
         for cdt in self.non_player_characters:
-            surface.blit(cdt.show(),(cdt.x-cadet.x, cdt.y-cadet.y))
+            surface.blit(cdt.show_base(),(cdt.x-cadet.x, cdt.y-cadet.y))
 
         cadet.show(surface)
+
+        for cdt in self.non_player_characters:
+            surface.blit(cdt.show_top(), (cdt.x-cadet.x, cdt.y-cadet.y))
 
         for img in self.fore_obj:
             surface.blit(img[0], (img[1]-cadet.x, img[2]-cadet.y))
@@ -53,9 +56,12 @@ class Room:
             surface.blit(img[0], (img[1] - cadet.x, img[2] - cadet.y))
 
         for cdt in self.non_player_characters:
-            surface.blit(cdt.show(), (cdt.x - cadet.x, cdt.y - cadet.y))
+            surface.blit(cdt.show_base(), (cdt.x - cadet.x, cdt.y - cadet.y))
 
         cadet.show(surface)
+
+        for cdt in self.non_player_characters:
+            surface.blit(cdt.show_top(), (cdt.x-cadet.x, cdt.y-cadet.y))
 
         for img in self.fore_obj:
             surface.blit(img[0], (img[1] - cadet.x, img[2] - cadet.y))
@@ -171,7 +177,7 @@ hallway = Room(pygame.image.load("surfaces/CADET_hall.png"),
            [36,90,29],
            [[54,262,9],[-74,262,9],[-104,22,6]],
            [0,2,3],     #next room index
-           [NPC(SpritePack(cadet_other),34,94,default_text)],
+           [NPC(SpritePack_NPC(cadet_NPC),34,94,default_text,0)],
            [19],
             6)
 
@@ -205,7 +211,7 @@ barracks0 = Room(pygame.image.load("surfaces/CADET_room_a.png"),
             [123],
             [[-104,54,6]],
             [1],    #next room index
-            [NPC(SpritePack(cadet_other),34,128,default_text)],
+            [NPC(SpritePack_NPC(cadet_NPC),34,128,default_text,0)],
             [37],
              9)
 
@@ -235,7 +241,7 @@ barracks1 = Room(pygame.image.load("surfaces/CADET_room_b.png"),
             [119],
             [[-104,342,6]],
             [1],    #next room index
-            [NPC(SpritePack(cadet_other),34,128,default_text)],
+            [NPC(SpritePack_NPC(cadet_NPC),34,128,default_text,1)],
              [37],
               9)
 
@@ -247,14 +253,14 @@ m1_stairwell = Room(pygame.image.load("surfaces/CADET_stairwell_ground.png"),
              12,   14,15,16,17,
              18,            23,
              24,            29,
-             30,            35,
+             30,31,         35,
              36,            41,
              42,43,      46,47],
              [13,44,45],
              [[-10,-42,6],[118,-10,18],[118,-10,18]],
              [3, 7, 7],
-             [],
-             [],
+             [blocker_001],
+             [31],
               6)
 
 m2_stairwell = Room(pygame.image.load("surfaces/CADET_stairwell_working.png"),
@@ -305,7 +311,7 @@ Mac_401 = Room(pygame.image.load("surfaces/CADET_room_a.png"),
             [123],
             [[-104,54,6]],
             [1],    #next room index
-            [NPC(SpritePack(cadet_other),34,128,default_text)],
+            [Blocker(34,128,1)],
             [37],
              9)
 
@@ -354,8 +360,8 @@ home_main = Room(pygame.image.load("surfaces/HOME_main.png"),
                  [47],
                  [[120,6,12]],
                  [5],
-                 [mother_home],
-                 [42],
+                 [],#mother_home],
+                 [],#42],
                   13)
 
 sally_port = Room(pygame.image.load("surfaces/sally_port.png"),

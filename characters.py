@@ -5,20 +5,36 @@ from interaction import *
 
 choice_0 = [pygame.image.load("sprites/decal/choices/0.png"),pygame.image.load("sprites/decal/choices/1.png"),pygame.image.load("sprites/decal/choices/2.png"),pygame.image.load("sprites/decal/choices/3.png")]
 
-cadet_male = [["sprites/character_packs/cadet_male/"],['b-s.png','b-l.png','b-r.png',   # back = 0
-                                                      'f-s.png','f-l.png','f-r.png',    # front= 1
-                                                      'l-s.png','l-l.png','l-r.png',    # left = 2
-                                                      'r-s.png','r-l.png','r-r.png']]  # right= 3
+#cadet_male = [["sprites/character_packs/cadet_male/"],['b-s.png','b-l.png','b-r.png',   # back = 0
+#                                                      'f-s.png','f-l.png','f-r.png',    # front= 1
+#                                                      'l-s.png','l-l.png','l-r.png',    # left = 2
+#                                                      'r-s.png','r-l.png','r-r.png']]  # right= 3
 
 cadet_other = [["sprites/character_packs/cadet_other/"],['b-s.png','b-l.png','b-r.png',   # back = 0
                                                       'f-s.png','f-l.png','f-r.png',    # front= 1
                                                       'l-s.png','l-l.png','l-r.png',    # left = 2
-                                                      'r-s.png','r-l.png','r-r.png']]  # right= 3
+                                                      'r-s.png','r-l.png','r-r.png']]
 
-mother = [["sprites/character_packs/mother/"],['b-s.png','b-l.png','b-r.png',   # back = 0
+cadet_NPC = [["sprites/character_packs/cadet_other/"],['b-s.png','b-l.png','b-r.png',   # back = 0
                                                       'f-s.png','f-l.png','f-r.png',    # front= 1
                                                       'l-s.png','l-l.png','l-r.png',    # left = 2
-                                                      'r-s.png','r-l.png','r-r.png']]
+                                                      'r-s.png','r-l.png','r-r.png'],  # right= 3
+                                                     ['b.png','f.png','l.png','r.png']]
+
+#mother = [["sprites/character_packs/mother/"],['b-s.png','b-l.png','b-r.png',   # back = 0
+#                                                      'f-s.png','f-l.png','f-r.png',    # front= 1
+#                                                      'l-s.png','l-l.png','l-r.png',    # left = 2
+#                                                      'r-s.png','r-l.png','r-r.png']]
+
+class SpritePack_NPC:
+    def __init__(self, spritesList):
+        self.sprites = [[],[]]
+        for img in spritesList[1]:
+            self.sprites[0].append(pygame.image.load(spritesList[0][0]+img))
+        for img in spritesList[2]:
+            self.sprites[1].append(pygame.image.load(spritesList[0][0]+"front/"+img))
+    def get(self, j, i):
+        return self.sprites[j][i]
 
 class SpritePack:
     def __init__(self, spritesList):
@@ -71,24 +87,27 @@ class Player:
 
 # TODO: Add Current_TEXT int and next_TEXT list
 class NPC:
-    def __init__(self, spritePack, x, y, text_block):
+    def __init__(self, spritePack, x, y, text_block, face):
         self.sprites = spritePack
         self.x = x; self.y = y
         self.stationary = True
-        self.face = 0; self.pose = 0
+        self.face = face; self.pose = 0
         self.block = 14
         self.text_block = text_block
         self.just_moved = True; self.jm_counter = 0
         self.action = False
         self.message = ["","","",""]
 
-    def show(self):
+    def show_base(self):
         if self.pose == 0:
-            return (self.sprites[(self.face*3)])
+            return (self.sprites.get(0, (self.face*3)))
         elif (self.pose < 8):
-            return (self.sprites[(self.face*3+1)])
+            return (self.sprites.get(0, (self.face*3+1)))
         else:
-            return (self.sprites[self.face*3+2])
+            return (self.sprites.get(0,self.face*3+2))
+
+    def show_top(self):
+        return self.sprites.get(1, self.face)
 
     def move(self,direction):
         if (direction != "s"):
@@ -140,10 +159,7 @@ class NPC:
         else: self.face = 2
 
 
-default_text = ["This is the first line",
-                "This is the second line",
-                "This is the third line",
-                "This is the last line"]
+
 
 text_000    = ["Jake! There are some serious regs",
                "violations going down in the",
@@ -169,16 +185,27 @@ class Text_Block:
         self.result = result
         self.next_text = next_text
 
-basic_blocker = NPC(SpritePack(cadet_other),32,64,["Sorry, bro.",
-                                                   "You can't go this way yet.",
-                                                   "",
-                                                   ""])
+default_text = Text_Block(["This is the first line",
+                "This is the second line",
+                "This is the third line",
+                "This is the last line"],[],-1,[])
 
-mother_home = NPC(SpritePack(mother),96,96,["Hey, Jake",
-                                            "Are you excited?",
-                                            "Ready to go to West Point?",
-                                            "DCX CTS 000"])
+class Blocker(NPC):
+    def __init__(self, x, y, f):
+        NPC.__init__(self, SpritePack_NPC(cadet_NPC),x,y,blocker_text,f)
+
+blocker_text = Text_Block(["Sorry, bro.",
+                          "You can't go this way yet.",
+                          "...",
+                          "..."], [],-1,[])
+basic_blocker = Blocker(32,64,1)
+
+blocker_001 = NPC(SpritePack_NPC(cadet_NPC),30,156,blocker_text,3)
+#mother_home = NPC(SpritePack(mother),96,96,["Hey, Jake",
+#                                            "Are you excited?",
+#                                            "Ready to go to West Point?",
+#                                            "DCX CTS 000"])
 text_D = ["What?","What do you still want?","",""]
 empty_res = Text_Block(text_D,[],-1,[])
 
-cadet_000 = NPC(SpritePack(cadet_other),258,96,Text_Block(text_000,choice_0,0,[empty_res,empty_res,empty_res,empty_res]))
+cadet_000 = NPC(SpritePack_NPC(cadet_NPC),258,96,Text_Block(text_000,choice_0,0,[empty_res,empty_res,empty_res,empty_res]), 1)

@@ -2,21 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ce2331bb-820d-47d6-8efd-d44cdec143d1" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sprites/character_packs/cadet_male/b-l.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sprites/character_packs/cadet_male/b-r.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sprites/character_packs/cadet_male/b-s.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sprites/character_packs/cadet_male/f-l.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sprites/character_packs/cadet_male/f-r.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sprites/character_packs/cadet_male/f-s.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sprites/character_packs/cadet_male/l-l.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sprites/character_packs/cadet_male/l-r.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sprites/character_packs/cadet_male/l-s.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sprites/character_packs/cadet_male/r-l.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sprites/character_packs/cadet_male/r-r.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sprites/character_packs/cadet_male/r-s.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sprites/decal/mouse.png" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/characters.py" afterPath="$PROJECT_DIR$/characters.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game.py" afterPath="$PROJECT_DIR$/game.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/room_data.py" afterPath="$PROJECT_DIR$/room_data.py" />
     </list>
     <ignored path="East_Edge.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -39,11 +28,11 @@
       <file leaf-file-name="game.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/game.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="35" column="17" selection-start-line="35" selection-start-column="17" selection-end-line="35" selection-end-column="17" />
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding>
                 <element signature="e#0#33#0" expanded="true" />
-                <element signature="e#6103#9072#1" expanded="false" />
+                <element signature="e#6173#9142#1" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -52,8 +41,8 @@
       <file leaf-file-name="menu.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/menu.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="8" column="32" selection-start-line="8" selection-start-column="27" selection-end-line="8" selection-end-column="32" />
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -64,8 +53,8 @@
       <file leaf-file-name="characters.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/characters.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="277">
-              <caret line="172" column="70" selection-start-line="172" selection-start-column="70" selection-end-line="172" selection-end-column="70" />
+            <state relative-caret-position="323">
+              <caret line="190" column="50" selection-start-line="190" selection-start-column="50" selection-end-line="190" selection-end-column="50" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -76,8 +65,8 @@
       <file leaf-file-name="interaction.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/interaction.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="17">
+              <caret line="29" column="22" selection-start-line="29" selection-start-column="22" selection-end-line="29" selection-end-column="22" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -98,8 +87,8 @@
       <file leaf-file-name="room_data.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/room_data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="573">
-              <caret line="118" column="33" selection-start-line="118" selection-start-column="33" selection-end-line="118" selection-end-column="33" />
+            <state relative-caret-position="295">
+              <caret line="174" column="31" selection-start-line="174" selection-start-column="31" selection-end-line="174" selection-end-column="31" />
               <folding />
             </state>
           </provider>
@@ -131,9 +120,9 @@
         <option value="$PROJECT_DIR$/display.py" />
         <option value="$PROJECT_DIR$/story.py" />
         <option value="$PROJECT_DIR$/interaction.py" />
-        <option value="$PROJECT_DIR$/room_data.py" />
         <option value="$PROJECT_DIR$/menu.py" />
         <option value="$PROJECT_DIR$/game.py" />
+        <option value="$PROJECT_DIR$/room_data.py" />
         <option value="$PROJECT_DIR$/characters.py" />
       </list>
     </option>
@@ -141,8 +130,8 @@
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
-    <option name="width" value="1382" />
-    <option name="height" value="744" />
+    <option name="width" value="1616" />
+    <option name="height" value="876" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -482,11 +471,18 @@
       <option name="project" value="LOCAL" />
       <updated>1475605134896</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="edited Text_Block to handle consecutive interaction">
+      <created>1475852746543</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1475852746543</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.067349926" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -494,7 +490,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2534319" sideWeight="0.5625" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27244094" sideWeight="0.494375" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17165354" sideWeight="0.4375" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14211212" sideWeight="0.4375" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -551,7 +547,8 @@
     <MESSAGE value="Reformat code and increase modularity" />
     <MESSAGE value="Minor improvements to code." />
     <MESSAGE value="NPCs now face player when interacted with." />
-    <option name="LAST_COMMIT_MESSAGE" value="NPCs now face player when interacted with." />
+    <MESSAGE value="edited Text_Block to handle consecutive interaction" />
+    <option name="LAST_COMMIT_MESSAGE" value="edited Text_Block to handle consecutive interaction" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -574,7 +571,7 @@
           <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
           <folding>
             <element signature="e#0#33#0" expanded="true" />
-            <element signature="e#6103#9072#1" expanded="false" />
+            <element signature="e#6173#9142#1" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -604,7 +601,7 @@
           <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
           <folding>
             <element signature="e#0#33#0" expanded="true" />
-            <element signature="e#6103#9072#1" expanded="false" />
+            <element signature="e#6173#9142#1" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -634,7 +631,7 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#33#0" expanded="true" />
-            <element signature="e#6103#9072#1" expanded="false" />
+            <element signature="e#6173#9142#1" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -645,7 +642,7 @@
           <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
           <folding>
             <element signature="e#0#33#0" expanded="true" />
-            <element signature="e#6103#9072#1" expanded="false" />
+            <element signature="e#6173#9142#1" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -675,7 +672,7 @@
           <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
           <folding>
             <element signature="e#0#33#0" expanded="true" />
-            <element signature="e#6103#9072#1" expanded="false" />
+            <element signature="e#6173#9142#1" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -705,7 +702,7 @@
           <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
           <folding>
             <element signature="e#0#33#0" expanded="true" />
-            <element signature="e#6103#9072#1" expanded="false" />
+            <element signature="e#6173#9142#1" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -735,7 +732,7 @@
           <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="36" />
           <folding>
             <element signature="e#0#33#0" expanded="true" />
-            <element signature="e#6103#9072#1" expanded="false" />
+            <element signature="e#6173#9142#1" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -765,7 +762,7 @@
           <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="36" />
           <folding>
             <element signature="e#0#33#0" expanded="true" />
-            <element signature="e#6103#9072#1" expanded="false" />
+            <element signature="e#6173#9142#1" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -795,7 +792,7 @@
           <caret line="8" column="19" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="19" />
           <folding>
             <element signature="e#0#33#0" expanded="true" />
-            <element signature="e#6103#9072#1" expanded="false" />
+            <element signature="e#6173#9142#1" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -825,7 +822,7 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#33#0" expanded="true" />
-            <element signature="e#6103#9072#1" expanded="false" />
+            <element signature="e#6173#9142#1" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -854,7 +851,7 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#33#0" expanded="true" />
-            <element signature="e#6103#9072#1" expanded="false" />
+            <element signature="e#6173#9142#1" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -883,7 +880,7 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#33#0" expanded="true" />
-            <element signature="e#6103#9072#1" expanded="false" />
+            <element signature="e#6173#9142#1" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -914,44 +911,7 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/display.py" />
-    <entry file="file://$PROJECT_DIR$/story.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="14" selection-start-line="2" selection-start-column="14" selection-end-line="2" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/game.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="35" column="17" selection-start-line="35" selection-start-column="17" selection-end-line="35" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#33#0" expanded="true" />
-            <element signature="e#6103#9072#1" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/room_data.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="573">
-          <caret line="118" column="33" selection-start-line="118" selection-start-column="33" selection-end-line="118" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/menu.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="8" column="32" selection-start-line="8" selection-start-column="27" selection-end-line="8" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/interaction.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -961,10 +921,47 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/game.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#33#0" expanded="true" />
+            <element signature="e#6173#9142#1" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/interaction.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="29" column="22" selection-start-line="29" selection-start-column="22" selection-end-line="29" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/story.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="14" selection-start-line="2" selection-start-column="14" selection-end-line="2" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/room_data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="295">
+          <caret line="174" column="31" selection-start-line="174" selection-start-column="31" selection-end-line="174" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/characters.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="277">
-          <caret line="172" column="70" selection-start-line="172" selection-start-column="70" selection-end-line="172" selection-end-column="70" />
+        <state relative-caret-position="323">
+          <caret line="190" column="50" selection-start-line="190" selection-start-column="50" selection-end-line="190" selection-end-column="50" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>

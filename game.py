@@ -137,6 +137,8 @@ class Controller(object):
 
 
 pygame.init()
+
+pygame.display.set_icon(pygame.image.load("sprites/decal/icon.png"))
 game = Controller()
 game.run()
 """

@@ -4,7 +4,7 @@ from images import *
 from interaction import *
 
 choice_0 = [pygame.image.load("sprites/decal/choices/0.png"),pygame.image.load("sprites/decal/choices/1.png"),pygame.image.load("sprites/decal/choices/2.png"),pygame.image.load("sprites/decal/choices/3.png")]
-
+choice_1 = [pygame.image.load("sprites/decal/choices/4.png"),pygame.image.load("sprites/decal/choices/5.png")]
 #cadet_male = [["sprites/character_packs/cadet_male/"],['b-s.png','b-l.png','b-r.png',   # back = 0
 #                                                      'f-s.png','f-l.png','f-r.png',    # front= 1
 #                                                      'l-s.png','l-l.png','l-r.png',    # left = 2
@@ -146,6 +146,10 @@ class NPC:
         text_box.message_marker = 4
         mode = "Talking"
         while (mode=="Talking"):
+            if (story.decisions[self.text_block.result] != -1):
+                self.text_block = self.text_block.next_text[story.decisions[self.text_block.result]]
+                text_box.message = [self.text_block.text[0], self.text_block.text[1], self.text_block.text[2],self.text_block.text[3]]
+                text_box.message_marker = 4
             mode = text_box.getEvents(self.text_block)
             text_box.draw_text(surface, self.text_block)
             fpsClock.tick(FPS)
@@ -222,12 +226,50 @@ text_001 = ["Hey, word spreads fast here. I",
             "",
             ""]
 
-text_002 = ["Second","","",""]
+text_002 = ["Hey, things get around pretty",
+            "quick here and I heard what you",
+            "said to Steve outside. I get it.",
+            "You want do do the /'right thing/'",
+            ###
+            "You're still full of Kewl-Aid from",
+            "Beast. I know how you feel, wanting",
+            "to make sure that everything is",
+            "Done by the book.",
+            ###
+            "That's what this is, right?",
+            "DCX FLO",
+            "",
+            "",
+            ###
+            ""]
+
 text_003 = ["Third","","",""]
 text_004 = ["Fourth","","",""]
+text_005 = ["*Sigh* Well... I'm not about to",
+            "just let someone like you walk into",
+            " my company area with an attitude",
+            "like that."
+            ###
+            "ATK",
+            "",
+            "",
+            ""]
+
+text_006 = ["Okay, cool. Just remember that",
+            "you don't have to do everything",
+            "by the book to be a good leader.",
+            "It's about the people.",
+            ##
+            "CTS 002",
+            "",
+            "",
+            ""]
 
 cadet_001 = NPC(SpritePack_NPC(cadet_NPC),34,64,1,Text_Block(text_001,choice_0,0,[
                                                             Text_Block(text_001,[],1,[empty_res]),
-                                                            Text_Block(text_002,[],1,[empty_res]),
+                                                            Text_Block(text_002,choice_1,1,[
+                                                                Text_Block(text_005,[],2,[empty_res]),
+                                                                Text_Block(text_006,[],2,[empty_res])
+                                                            ]),
                                                             Text_Block(text_003,[],1,[empty_res]),
                                                             Text_Block(text_004,[],1,[empty_res])]))

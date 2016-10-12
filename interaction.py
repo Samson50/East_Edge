@@ -66,14 +66,22 @@ class TextBox:
 
     def update_message(self, text_block):
         for i in range(0,4):
+            print self.message[i]
             if ("DCX" in self.message[i]):
+                print "here"
                 if ("CTX" in self.message[i]):
                     story.decisions[text_block.result] = self.decision_marker
                     story.current_scene = int(self.message[i].split(" ")[2])
                     self.message_marker = 0
                     self.message = ["","","",""]
-                    print story.current_scene
                     return "Cut_Scene"
+                elif ("FLO" in self.message[i]):
+                    print "here"
+                    story.decisions[text_block.result] = self.decision_marker
+                    self.message_marker = 0
+                    self.message = ["","","",""]
+                    return "Talking"
+
                 else:
                     story.decisions[text_block.result] = self.decision_marker
                     self.message_marker = 0
@@ -92,6 +100,11 @@ class TextBox:
                         self.message_marker = 0
                         self.message = ["", "", "", ""]
                         return "Cut_Scene"
+                    elif ("ATK" in text_block.text[self.message_marker]):
+                        story.decisions[text_block.result] = 0
+                        self.message_marker = 0
+                        self.message = ["","","",""]
+                        return "Attack"
                     else:
                         self.message[i] = text_block.text[self.message_marker]
                         self.message_marker += 1

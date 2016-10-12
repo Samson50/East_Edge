@@ -117,8 +117,6 @@ class Room:
                 surface = self.cheap_display(surface, cadet)
                 pygame.display.update()
                 return self.non_player_characters[i].talk_to(text_box, fpsClock, FPS, surface)
-            else:
-                return "Moving"
 
         elif cadet.face == 1:
             if (X + (Y + 1) * self.width) in self.actionable:
@@ -127,8 +125,6 @@ class Room:
                 surface = self.cheap_display(surface, cadet)
                 pygame.display.update()
                 return self.non_player_characters[i].talk_to(text_box, fpsClock, FPS, surface)
-            else:
-                return "Moving"
 
         elif cadet.face == 2:
             if (X - 1 + Y * self.width) in self.actionable:
@@ -137,18 +133,17 @@ class Room:
                 surface = self.cheap_display(surface, cadet)
                 pygame.display.update()
                 return self.non_player_characters[i].talk_to(text_box, fpsClock, FPS, surface)
-            else:
-                return "Moving"
 
-        else:
+        elif cadet.face == 3:
             if (X + 1 + Y * self.width) in self.actionable:
                 i = self.actionable.index(X + 1 + Y * self.width)
                 self.non_player_characters[i].look_at(cadet.face)
                 surface = self.cheap_display(surface, cadet)
                 pygame.display.update()
                 return self.non_player_characters[i].talk_to(text_box, fpsClock, FPS, surface)
-            else:
-                return "Moving"
+
+        else:
+            return "Moving"
 
 hallway = Room(pygame.image.load("surfaces/CADET_hall.png"),
            [[pygame.image.load("sprites/objects/CADET_door.png"),0,198],
@@ -177,7 +172,7 @@ hallway = Room(pygame.image.load("surfaces/CADET_hall.png"),
            [36,90,29],
            [[54,262,9],[-74,262,9],[-104,22,6]],
            [0,2,3],     #next room index
-           [NPC(SpritePack_NPC(cadet_NPC),34,94,default_text,0)],
+           [NPC(SpritePack_NPC(cadet_NPC),34,94,0,default_text)],
            [19],
             6)
 
@@ -211,7 +206,7 @@ barracks0 = Room(pygame.image.load("surfaces/CADET_room_a.png"),
             [123],
             [[-104,54,6]],
             [1],    #next room index
-            [NPC(SpritePack_NPC(cadet_NPC),34,128,default_text,0)],
+            [NPC(SpritePack_NPC(cadet_NPC),34,128,0,default_text)],
             [37],
              9)
 
@@ -241,7 +236,7 @@ barracks1 = Room(pygame.image.load("surfaces/CADET_room_b.png"),
             [119],
             [[-104,342,6]],
             [1],    #next room index
-            [NPC(SpritePack_NPC(cadet_NPC),34,128,default_text,1)],
+            [NPC(SpritePack_NPC(cadet_NPC),34,128,1,default_text)],
              [37],
               9)
 

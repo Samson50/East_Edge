@@ -87,7 +87,7 @@ class Player:
 
 # TODO: Add Current_TEXT int and next_TEXT list
 class NPC:
-    def __init__(self, spritePack, x, y, text_block, face):
+    def __init__(self, spritePack, x, y, face, text_block):
         self.sprites = spritePack
         self.x = x; self.y = y
         self.stationary = True
@@ -186,13 +186,13 @@ class Text_Block:
         self.next_text = next_text
 
 default_text = Text_Block(["This is the first line",
-                "This is the second line",
-                "This is the third line",
-                "This is the last line"],[],-1,[])
+                           "This is the second line",
+                           "This is the third line",
+                           "This is the last line"],[],-1,[])
 
 class Blocker(NPC):
     def __init__(self, x, y, f):
-        NPC.__init__(self, SpritePack_NPC(cadet_NPC),x,y,blocker_text,f)
+        NPC.__init__(self, SpritePack_NPC(cadet_NPC),x,y,f,blocker_text)
 
 blocker_text = Text_Block(["Sorry, bro.",
                           "You can't go this way yet.",
@@ -200,7 +200,9 @@ blocker_text = Text_Block(["Sorry, bro.",
                           "..."], [],-1,[])
 basic_blocker = Blocker(32,64,1)
 
-blocker_001 = NPC(SpritePack_NPC(cadet_NPC),30,156,blocker_text,3)
+blocker_001 = NPC(SpritePack_NPC(cadet_NPC),30,156,3,blocker_text)
+blocker_002 = NPC(SpritePack_NPC(cadet_NPC),130,156,2,blocker_text)
+
 #mother_home = NPC(SpritePack(mother),96,96,["Hey, Jake",
 #                                            "Are you excited?",
 #                                            "Ready to go to West Point?",
@@ -208,4 +210,24 @@ blocker_001 = NPC(SpritePack_NPC(cadet_NPC),30,156,blocker_text,3)
 text_D = ["What?","What do you still want?","",""]
 empty_res = Text_Block(text_D,[],-1,[])
 
-cadet_000 = NPC(SpritePack_NPC(cadet_NPC),258,96,Text_Block(text_000,choice_0,0,[empty_res,empty_res,empty_res,empty_res]), 1)
+cadet_000 = NPC(SpritePack_NPC(cadet_NPC),258,96,1,Text_Block(text_000,choice_0,0,[empty_res,empty_res,empty_res,empty_res]))
+
+text_001 = ["Hey, word spreads fast here. I",
+            "heard what you said to Steve. You",
+            "seem like a cool guy. I'm not",
+            "about to hassle someone like you.",
+            ###
+            "CTS 002",
+            "",
+            "",
+            ""]
+
+text_002 = ["Second","","",""]
+text_003 = ["Third","","",""]
+text_004 = ["Fourth","","",""]
+
+cadet_001 = NPC(SpritePack_NPC(cadet_NPC),34,64,1,Text_Block(text_001,choice_0,0,[
+                                                            Text_Block(text_001,[],1,[empty_res]),
+                                                            Text_Block(text_002,[],1,[empty_res]),
+                                                            Text_Block(text_003,[],1,[empty_res]),
+                                                            Text_Block(text_004,[],1,[empty_res])]))

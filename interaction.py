@@ -8,8 +8,9 @@ from pygame.locals import *
 ##== Cut-Scenes ==##
 m_o = [["00:d"]*16+["00:r"]*16+["00:d"]*48+["00:r"]*16+["00:d"]*32+["00:r"]*16+["C:2:64:56"],[]]
 s_00 = [["M:d"]*17+["M:u"]+["00:d"]*16+["00:l"]*16+["00:f:2"]+["N:62:79"], []]
+s_01 = [["M:r"]*16+["01:d"]*28+["01:r"]*16+["01:d"]*32+["01:l"]*18+["01:f:2"]+["N:13:37"], []]
 
-cut_scenes = [m_o,s_00]
+cut_scenes = [m_o,s_00,s_01]
 
 
 class TextBox:
@@ -66,13 +67,6 @@ class TextBox:
     def update_message(self, text_block):
         for i in range(0,4):
             if ("DCX" in self.message[i]):
-                if ("CTS" in self.message[i]):
-                    if (self.decision_marker == 0):
-                        story.current_scene = int(self.message[i].split(" ")[2])
-                        self.message_marker = 0
-                        self.message = ["", "", "", ""]
-                        return "Cut_Scene"
-                    else: return "Moving"
                 if ("CTX" in self.message[i]):
                     story.decisions[text_block.result] = self.decision_marker
                     story.current_scene = int(self.message[i].split(" ")[2])
@@ -92,8 +86,15 @@ class TextBox:
                     self.message = ["","","",""]
                     return "Moving"
                 else:
-                    self.message[i] = text_block.text[self.message_marker]
-                    self.message_marker += 1
+                    if ("CTS" in text_block.text[self.message_marker]):
+                        story.decisions[text_block.result] = 0
+                        story.current_scene = int(text_block.text[self.message_marker].split(" ")[-1])
+                        self.message_marker = 0
+                        self.message = ["", "", "", ""]
+                        return "Cut_Scene"
+                    else:
+                        self.message[i] = text_block.text[self.message_marker]
+                        self.message_marker += 1
         return "Talking"
 
 

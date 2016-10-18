@@ -134,11 +134,16 @@ class Controller(object):
 
                 fpsClock.tick(FPS)
 
+            ###
+            while self.mode == "Fighting":
+                print "working"
+
 
 
 pygame.init()
 
 pygame.display.set_icon(pygame.image.load("sprites/decal/icon.png"))
+pygame.display.set_caption("East Edge")
 game = Controller()
 game.run()
 """

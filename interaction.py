@@ -110,5 +110,9 @@ class TextBox:
                         self.message_marker += 1
         return "Talking"
 
+class CombatBox:
+    def __init__(self):
+        self.background = "Thing"
+
 
 

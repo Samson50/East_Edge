@@ -104,15 +104,105 @@ class TextBox:
                         story.decisions[text_block.result] = 0
                         self.message_marker = 0
                         self.message = ["","","",""]
-                        return "Attack"
+                        return "Fighting"
                     else:
                         self.message[i] = text_block.text[self.message_marker]
                         self.message_marker += 1
         return "Talking"
 
+
+class Choice:
+    def __init__(self, image, x, y):
+        self.image = pygame.image.load(image)
+        self.x = x
+        self.y = y
+
+    def show(self, surface):
+        surface.blit(self.image, (self.x, self.y))
+
+
 class CombatBox:
     def __init__(self):
-        self.background = "Thing"
+        self.background = pygame.image.load("surfaces/combat/combat.png")
+        self.pointer = pygame.image.load("sprites/decal/decision.png")
+        self.decision = 0
+        self.level = 0
+        self.i = 0; self.j = 0
+        self.levels = [self.i, self.j]
+        self.mode = "Fighting"
+        self.choices = [Choice("surfaces/combat/act.png",47,207),
+                        Choice("surfaces/combat/analyze.png",142,207),
+                        Choice("surfaces/combat/item.png",34,252),
+                        Choice("surfaces/combat/leave.png",170,252)]
+        self.acts = [] #list of players action classes
+
+    def set_up(self,opponent,cadet):
+        cadet.face = 1
+        cadet.pose = 9
+        self.opponent = opponent
+        self.mode = "Fighting"
+        self.cadet = cadet
+        self.items = cadet.items ## TODO add items to cadet class
+
+    def analyze(self):
+        print "working"
+
+    def leave(self):
+        print "working"
+
+    def get_events(self):
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+
+            if event.type == KEYDOWN:
+                if event.key == K_LEFT: self.decision -= 1
+                if event.key == K_RIGHT: self.decision += 1
+
+                if event.key == K_f:
+                    if self.level == 0:
+                        self.levels[self.level] = self.decision
+                        self.level += 1
+
+                    elif self.level == 1:
+                        if self.levels[0] == 0:
+                            self.acts[self.decision].run() ## TODO implement acts
+
+                        if self.levels[0] == 1:
+                            self.analyze()
+
+                        if self.levels[0] == 2:
+                            self.items[self.decision].run() ## TODO implement items
+
+                        if self.levels[0] == 3:
+                            self.leave()
+
+                if event.key == K_d:
+                    if self.level > 0 : self.level -= 1
+
+        self.decision %= 4
+        return self.mode
+
+    def show(self, surface,cadet):
+        surface.blit(self.background, (0,0))
+
+        surface.blit(cadet.sprites[10], (20,150))
+
+        if self.level == 0:
+            for choice in self.choices:
+                choice.show(surface)
+
+        surface.blit(self.pointer, (47 + (self.decision%2)*142, 207 + (self.decision/2)*45))
+
+        if self.level == 1:
+            if self.levels[0] == 0:
+                print "actions"
+
+            if self.levels[0] == 2:
+                print "items"
+
+        pygame.display.update()
 
 
 

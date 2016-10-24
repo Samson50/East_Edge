@@ -20,6 +20,7 @@ class Controller(object):
         self.cadet = Player(SpritePack(cadet_other),28,16)
         self.rooms = ROOMS
         self.room = ROOMS[0]
+        self.combat = CombatBox()
         self.width = 0
         self.fade_count = 0
         self.fade = pygame.image.load("surfaces/fade.png").convert()
@@ -135,8 +136,10 @@ class Controller(object):
                 fpsClock.tick(FPS)
 
             ###
+            self.combat.set_up(0, self.cadet)
             while self.mode == "Fighting":
-                print "working"
+                self.combat.get_events()
+                self.combat.show(self.surface, self.cadet)
 
 
 

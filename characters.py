@@ -2,6 +2,7 @@ import pygame, random
 from pygame.locals import *
 from images import *
 from interaction import *
+from item import *
 
 choice_0 = [pygame.image.load("sprites/decal/choices/0.png"),pygame.image.load("sprites/decal/choices/1.png"),pygame.image.load("sprites/decal/choices/2.png"),pygame.image.load("sprites/decal/choices/3.png")]
 choice_1 = [pygame.image.load("sprites/decal/choices/4.png"),pygame.image.load("sprites/decal/choices/5.png")]
@@ -48,11 +49,12 @@ class Player:
     def __init__(self, spritePack, x, y):
         self.sprites = spritePack
         self.status_bar = pygame.image.load("sprites/status/status_bar.png")
-        self.health = 100
+        self.health = 100; self.max_health = 100
         self.x = x
         self.y = y
         self.face = 0
         self.pace = 0
+        self.items = [Potion("sprites/items/potion.png")]
 
     def status(self, surface):
         surface.blit(self.status_bar, (0, 0))
@@ -248,7 +250,7 @@ text_004 = ["Fourth","","",""]
 text_005 = ["*Sigh* Well... I'm not about to",
             "just let someone like you walk into",
             " my company area with an attitude",
-            "like that."
+            "like that.",
             ###
             "ATK",
             "",

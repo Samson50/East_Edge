@@ -22,6 +22,18 @@ cadet_NPC = [["sprites/character_packs/cadet_other/"],['b-s.png','b-l.png','b-r.
                                                       'r-s.png','r-l.png','r-r.png'],  # right= 3
                                                      ['b.png','f.png','l.png','r.png']]
 
+female_white_ginger = [["sprites/character_packs/ladies/red/hair-down/"],['b-s.png','b-l.png','b-r.png',   # back = 0
+                                                                          'f-s.png','f-l.png','f-r.png',    # front= 1
+                                                                          'l-s.png','l-l.png','l-r.png',    # left = 2
+                                                                          'r-s.png','r-l.png','r-r.png'],  # right= 3
+                                                                        ['b.png','f.png','l.png','r.png']]
+
+female_white_brown = [["sprites/character_packs/ladies/brown/bun/"],['b-s.png','b-l.png','b-r.png',   # back = 0
+                                                                          'f-s.png','f-l.png','f-r.png',    # front= 1
+                                                                          'l-s.png','l-l.png','l-r.png',    # left = 2
+                                                                          'r-s.png','r-l.png','r-r.png'],  # right= 3
+                                                                        ['b.png','f.png','l.png','r.png']]
+
 #mother = [["sprites/character_packs/mother/"],['b-s.png','b-l.png','b-r.png',   # back = 0
 #                                                      'f-s.png','f-l.png','f-r.png',    # front= 1
 #                                                      'l-s.png','l-l.png','l-r.png',    # left = 2
@@ -167,6 +179,29 @@ class NPC:
 
 
 
+
+
+class Text_Block:
+    def __init__(self, text, choices, result, next_text):
+        self.text = text
+        self.choices = choices
+        self.result = result
+        self.next_text = next_text
+
+
+
+class Blocker(NPC):
+    def __init__(self, x, y, f):
+        NPC.__init__(self, SpritePack_NPC(cadet_NPC),x,y,f,blocker_text)
+
+ginger1 = SpritePack_NPC(female_white_ginger)
+brown1 = SpritePack_NPC(female_white_brown)
+
+default_text = Text_Block(["This is the first line",
+                           "This is the second line",
+                           "This is the third line",
+                           "This is the last line"],[],-1,[])
+
 text_000    = ["Jake! There are some serious regs",
                "violations going down in the",
                "barracks! I know you're just a",
@@ -183,22 +218,6 @@ text_000    = ["Jake! There are some serious regs",
                "",
                ##
                ""]
-
-class Text_Block:
-    def __init__(self, text, choices, result, next_text):
-        self.text = text
-        self.choices = choices
-        self.result = result
-        self.next_text = next_text
-
-default_text = Text_Block(["This is the first line",
-                           "This is the second line",
-                           "This is the third line",
-                           "This is the last line"],[],-1,[])
-
-class Blocker(NPC):
-    def __init__(self, x, y, f):
-        NPC.__init__(self, SpritePack_NPC(cadet_NPC),x,y,f,blocker_text)
 
 blocker_text = Text_Block(["Sorry, bro.",
                           "You can't go this way yet.",

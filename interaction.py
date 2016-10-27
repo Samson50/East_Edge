@@ -2,6 +2,7 @@ import pygame, sys
 import characters
 import story
 from pygame.locals import *
+from images import *
 
 
 
@@ -17,13 +18,13 @@ class TextBox:
     def __init__(self):
         self.text = []
         self.message = ["", "", "", ""]
-        self.text_box = pygame.image.load("sprites/decal/textBox.png")
+        self.text_box = img_text_box
         self.font = pygame.font.Font(None, 20)
         self.message_marker = 0
         self.decision_marker = 0
-        self.yes = pygame.image.load("sprites/decal/yes.png")
-        self.no = pygame.image.load("sprites/decal/no.png")
-        self.decision = pygame.image.load("sprites/decal/decision.png")
+        self.yes = img_yes
+        self.no = img_no
+        self.decision = img_decision
 
     def getEvents(self, text_block):
         for event in pygame.event.get():
@@ -113,7 +114,7 @@ class TextBox:
 
 class Choice:
     def __init__(self, image, x, y):
-        self.image = pygame.image.load(image)
+        self.image = image
         self.x = x
         self.y = y
 
@@ -123,17 +124,17 @@ class Choice:
 
 class CombatBox:
     def __init__(self):
-        self.background = pygame.image.load("surfaces/combat/combat.png")
-        self.pointer = pygame.image.load("sprites/decal/decision.png")
+        self.background = combat_surface
+        self.pointer = img_decision
         self.decision = 0
         self.level = 0
         self.i = 0; self.j = 0
         self.levels = [self.i, self.j]
         self.mode = "Fighting"
-        self.choices = [Choice("surfaces/combat/act.png",47,207),
-                        Choice("surfaces/combat/analyze.png",142,207),
-                        Choice("surfaces/combat/item.png",34,252),
-                        Choice("surfaces/combat/leave.png",170,252)]
+        self.choices = [Choice(choice_act,47,207),
+                        Choice(choice_analyze,142,207),
+                        Choice(choice_item,34,252),
+                        Choice(choice_leave,170,252)]
         self.acts = [] #list of players action classes
 
     def set_up(self,opponent,cadet):

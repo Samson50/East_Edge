@@ -1,13 +1,14 @@
 import pygame, sys
 from pygame.locals import *
 from room_data import *
+from images import *
 
 class Menu:
     def __init__(self, surface):
         self.surface = surface
-        self.menu = pygame.image.load("sprites/decal/emblem.png")
-        self.play_button = pygame.image.load("sprites/decal/play_button.png")
-        self.logo = pygame.image.load("sprites/decal/game_menu.png")
+        self.menu = emblem
+        self.play_button = play_button
+        self.logo = logo
 
     def run(self):
         self.surface.fill((0,0,0))

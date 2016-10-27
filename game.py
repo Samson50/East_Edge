@@ -17,7 +17,7 @@ class Controller(object):
         self.mode = "Menu"
         self.text_box = TextBox()
         self.menu = Menu(self.surface)
-        self.cadet = Player(SpritePack(cadet_other),28,16)
+        self.cadet = Player(player_pack,28,16)
         self.rooms = ROOMS
         self.room = ROOMS[0]
         self.combat = CombatBox()

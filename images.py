@@ -94,7 +94,14 @@ choice_item = pygame.image.load("surfaces/combat/item.png")
 choice_analyze = pygame.image.load("surfaces/combat/analyze.png")
 choice_leave = pygame.image.load("surfaces/combat/leave.png")
 combat_surface = pygame.image.load("surfaces/combat/combat.png")
-combat_decision = pygame.image.load("sprites/decal/decision.png")
+combat_decision = pygame.image.load("surfaces/combat/acts_decision.png")
+act_attack = pygame.image.load("surfaces/combat/acts/attack.png")
+act_NCOR = pygame.image.load("surfaces/combat/acts/NCOR.png")
+act_help = pygame.image.load("surfaces/combat/acts/help.png")
+act_lead = pygame.image.load("surfaces/combat/acts/lead.png")
+combat_text = pygame.image.load("surfaces/combat/texter.png")
+img_items = pygame.image.load("surfaces/combat/clicker.png")
+item_decision = pygame.image.load("surfaces/combat/item_decision.png")
 
 ## Menu ##
 
@@ -107,4 +114,6 @@ logo = pygame.image.load("sprites/decal/game_menu.png")
 exit_down = pygame.image.load("sprites/decal/exit_down.png")
 decal_m1 = pygame.image.load("sprites/decal/M1.png")
 decal_m2 = pygame.image.load("sprites/decal/M2.png")
+#"surfaces/fade.png"
+#"surfaces/fade_white.png"
 

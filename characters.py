@@ -176,7 +176,19 @@ class NPC:
         elif face == 2: self.face = 3
         else: self.face = 2
 
+class Combatant(NPC):
+    def __init__(self, spritePack, x, y, face, text_block):
+        NPC.__init__(self, spritePack, x, y, face, text_block)
+        self.escape_chance = 0
 
+    def escape_chance(self):
+        return 1
+
+    def analyze(self):
+        return "analyzing"
+
+    def leave(self):
+        return "leaving"
 
 
 
@@ -271,7 +283,7 @@ text_005 = ["*Sigh* Well... I'm not about to",
             " my company area with an attitude",
             "like that.",
             ###
-            "ATK",
+            "ATK 001",
             "",
             "",
             ""]
@@ -286,7 +298,7 @@ text_006 = ["Okay, cool. Just remember that",
             "",
             ""]
 
-cadet_001 = NPC(SpritePack_NPC(cadet_NPC),34,64,1,Text_Block(text_001,choice_0,0,[
+cadet_001 = Combatant(SpritePack_NPC(cadet_NPC),34,64,1,Text_Block(text_001,choice_0,0,[
                                                             Text_Block(text_001,[],1,[empty_res]),
                                                             Text_Block(text_002,choice_1,1,[
                                                                 Text_Block(text_005,[],2,[empty_res]),

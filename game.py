@@ -34,7 +34,7 @@ class Controller(object):
                 fpsClock.tick(FPS)
 
             while self.mode == "Menu":
-                self.mode = self.menu.run()
+                self.mode = self.menu.run(fpsClock)
                 if self.mode == "Moving":
                     (self.room, self.cadet.x, self.cadet.y) = self.menu.start_game()
                 fpsClock.tick(FPS)
@@ -136,10 +136,39 @@ class Controller(object):
                 fpsClock.tick(FPS)
 
             ###
-            self.combat.set_up(0, self.cadet)
+            self.combat.set_up(self.room.non_player_characters[story.opponent], self.cadet)
             while self.mode == "Fighting":
-                self.combat.get_events()
+                self.combat.get_events(self.surface)
                 self.combat.show(self.surface, self.cadet)
+
+    def intro(self):
+        counter = 0
+        current_image = pygame.image.load("sumgai.png")
+        cx = 100
+        cy = 100
+        while (counter < 135):
+            if counter < 30:
+                self.fade.set_alpha(255 - 255/29*counter)
+
+            if counter == 30: self.fade.set_alpha(0)
+
+            if counter > 74 and counter < 105:
+                self.fade.set_alpha(255/29*(counter%75))
+
+            if counter == 105:
+                current_image = emblem
+                cx = 2; cy = 16
+                self.fade.set_alpha(255)
+
+            if counter > 110:
+                self.fade.set_alpha(255 - 255/29*(counter%110))
+
+            counter += 1
+            self.surface.blit(current_image,(cx,cy))
+            self.surface.blit(self.fade,(0,0))
+            fpsClock.tick(30)
+            pygame.display.update()
+
 
 
 
@@ -147,7 +176,11 @@ pygame.init()
 
 pygame.display.set_icon(pygame.image.load("sprites/decal/icon.png"))
 pygame.display.set_caption("East Edge")
+#pygame.mixer.music.load("8-bit-Detective/detective.wav")
+#pygame.mixer.music.play(-1,0.0)
+#pygame.mixer.music.set_volume(0.1)
 game = Controller()
+game.intro()
 game.run()
 """
 class PLAYER:

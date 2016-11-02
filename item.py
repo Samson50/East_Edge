@@ -3,7 +3,10 @@ from pygame.locals import *
 
 class Item:
     def __init__(self, icon):
-        self.show = pygame.image.load(icon)
+        self.icon = pygame.image.load(icon)
+
+    def show(self, surface, x, y):
+        surface.blit(self.icon, (x,y))
 
 class Potion(Item):
     def __init__(self, icon):

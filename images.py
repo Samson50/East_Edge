@@ -89,10 +89,10 @@ img_decision = pygame.image.load("sprites/decal/decision.png")
 
 ## Combat ##
 
-choice_act = pygame.image.load("surfaces/combat/act.png")
-choice_item = pygame.image.load("surfaces/combat/item.png")
-choice_analyze = pygame.image.load("surfaces/combat/analyze.png")
-choice_leave = pygame.image.load("surfaces/combat/leave.png")
+choice_act = pygame.image.load("surfaces/combat/choices/act.png")
+choice_item = pygame.image.load("surfaces/combat/choices/item.png")
+choice_analyze = pygame.image.load("surfaces/combat/choices/analyze.png")
+choice_leave = pygame.image.load("surfaces/combat/choices/leave.png")
 combat_surface = pygame.image.load("surfaces/combat/combat.png")
 combat_decision = pygame.image.load("surfaces/combat/acts_decision.png")
 act_attack = pygame.image.load("surfaces/combat/acts/attack.png")
@@ -102,6 +102,22 @@ act_lead = pygame.image.load("surfaces/combat/acts/lead.png")
 combat_text = pygame.image.load("surfaces/combat/texter.png")
 img_items = pygame.image.load("surfaces/combat/clicker.png")
 item_decision = pygame.image.load("surfaces/combat/item_decision.png")
+health_block = pygame.image.load("surfaces/combat/status/health_block.png")
+morale_block = pygame.image.load("surfaces/combat/status/morale_block.png")
+overlay = pygame.image.load("surfaces/combat/status/cover.png")
+
+## Mini-Game ##
+
+mini_sprite = SpritePack([["surfaces/combat/mini_game/mini_sprite/"],["r-0.png","r-1.png","r-2.png","r-3.png",
+                                             "l-0.png","l-1.png","l-2.png","l-3.png"]])
+mini_tile = pygame.image.load("surfaces/combat/mini_game/grey_brick.png")
+mini_health = pygame.image.load("surfaces/combat/mini_game/health.png")
+mini_enemy = pygame.image.load("surfaces/combat/mini_game/enemy.png")
+mini_wall = pygame.image.load("surfaces/combat/mini_game/ranger_wall.png")
+mini_shelf = pygame.image.load("surfaces/combat/mini_game/shelf.png")
+mini_background = pygame.image.load("surfaces/combat/mini_game/background.png")
+mini_goal = pygame.image.load("surfaces/combat/mini_game/goal.png")
+mini_frame = pygame.image.load("surfaces/combat/mini_game/frame.png")
 
 ## Menu ##
 

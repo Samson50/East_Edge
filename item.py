@@ -15,6 +15,7 @@ class Potion(Item):
     def run(self, cadet, opponent):
         cadet.health += 10
         cadet.health  = min(cadet.health,cadet.max_health)
+        return [0, ["*Om-Nom-Nom*","","",""],[],["So yum","","","","ATE"]]
 
 
 

@@ -1,8 +1,10 @@
 import pygame, sys
 import characters
 import story
+import random
 from pygame.locals import *
 from images import *
+from mini_game import *
 
 
 
@@ -32,14 +34,19 @@ class TextBox:
                 pygame.quit()
                 sys.exit()
 
-            if event.type == KEYDOWN and event.key == K_f:
-                return self.update_message(text_block)
+            if event.type == KEYDOWN:
+                if event.key == K_f:
+                    return self.update_message(text_block)
+                if event.key == K_RIGHT:
+                    self.decision_marker += 1
+                if event.key == K_LEFT:
+                    self.decision_marker -= 1
+                if event.key == K_UP:
+                    self.decision_marker -= 2
+                if event.key == K_DOWN:
+                    self.decision_marker += 2
 
-            if event.type == KEYDOWN and event.key == K_RIGHT:
-                self.decision_marker += 1
-            if event.type == KEYDOWN and event.key == K_LEFT:
-                self.decision_marker -= 1
-            self.decision_marker = self.decision_marker%4
+            self.decision_marker %= (max(len(text_block.choices),1))
         return "Talking"
 
     def draw_text(self, surface, text_block):
@@ -120,36 +127,41 @@ class Choice:
     def show(self, surface):
         surface.blit(self.image, (self.x, self.y))
 
+
 class Attack(Choice):
     def __init__(self):
         Choice.__init__(self,act_attack, 79-act_attack.get_width()/2, 207)
 
-    def run(self,opponent):
-        print "ATTACK!!!"
+    def run(self, cadet, opponent):
+        damage = cadet.strength + (cadet.strength/10)*(random.randint(0,5)/5)
+        opponent.health -= damage
+        return [0,["You muster your strength and take",
+                   "a swing at your opponent's face...",
+                   "... Your swing connects, causing","{0} damage".format(damage)],[],["Text 2","","","", "ATE"]]
 
 
 class NCOR(Choice):
     def __init__(self):
         Choice.__init__(self, act_NCOR, 213-act_NCOR.get_width()/2, 207)
 
-    def run(self,opponent):
-        print "YOU ARE BAD!!!"
+    def run(self, cadet, opponent):
+        return [0, ["Text 1", "", "", ""], [], ["Text 2", "", "", "", "ATE"]]
 
 
 class Lead(Choice):
     def __init__(self):
         Choice.__init__(self, act_lead, 79-act_lead.get_width()/2, 252)
 
-    def run(self,opponent):
-        print "Inspired!!!"
+    def run(self, cadet, opponent):
+        return [0, ["Text 1", "", "", ""], [], ["Text 2", "", "", "", "ATE"]]
 
 
 class Help(Choice):
     def __init__(self):
         Choice.__init__(self, act_help, 213-act_help.get_width()/2, 252)
 
-    def run(self,opponent):
-        print "Empathy :)"
+    def run(self, cadet, opponent):
+        return [0, ["Text 1", "", "", ""], [], ["Text 2", "", "", "", "ATE"]]
 
 
 class CombatBox:
@@ -164,9 +176,9 @@ class CombatBox:
         self.display_mode = "choose"
         self.response = [[],[]]
         self.choices = [Choice(choice_act,47,207),
-                        Choice(choice_analyze,142,207),
+                        Choice(choice_analyze,164,207),
                         Choice(choice_item,34,252),
-                        Choice(choice_leave,170,252)]
+                        Choice(choice_leave,169,252)]
         self.acts = [Attack(),NCOR(),Lead(),Help()] #list of players action classes
         self.text_box = combat_text
         self.text = []
@@ -174,6 +186,7 @@ class CombatBox:
         self.message_marker = 0
         self.font = pygame.font.Font(None, 20)
         self.temp_items = []
+        self.mini_game = MiniGame()
 
     def set_up(self,opponent,cadet):
         cadet.face = 1
@@ -232,6 +245,8 @@ class CombatBox:
             if event.type == KEYDOWN:
                 if event.key == K_LEFT: self.decision -= 1
                 if event.key == K_RIGHT: self.decision += 1
+                if event.key == K_UP: self.decision -= 2
+                if event.key == K_DOWN: self.decision += 2
 
                 if event.key == K_f:
                     if self.display_mode == "choose":
@@ -253,37 +268,47 @@ class CombatBox:
                                 self.decision = 0
 
                         elif self.level == 1:
-                            ## ACT
+                            ## Specific ACTION
                             if self.levels[0] == 0:
-                                self.response = self.acts[self.decision].run(self.opponent)
+                                self.response = self.acts[self.decision].run(self.cadet, self.opponent)
                                 self.display_mode = "action"
                                 self.update_message()
                             ## Items
                             if self.levels[0] == 2:
-                                self.response = self.items[self.decision].run()
+                                self.response = self.items[self.decision].run(self.cadet, self.opponent)
                                 self.display_mode = "action"
                                 self.update_message()
 
                     elif self.display_mode == "action":
                         if self.response[0] == 0 or self.response[0] == 2:
                             self.update_message()
-                        if self.response[0] == 1:
-                            self.response[0] += 1
+                        #if self.response[0] == 1:
+                        #    self.response[0] += 1
 
                 if event.key == K_d:
                     if self.level > 0 : self.level -= 1
                     self.decision = 0
-
-        self.decision %= 4
+        if self.level == 1 and self.levels[0] == 2: self.decision %= len(self.items)
+        else: self.decision %= 4
         return self.mode
 
     def show(self, surface,cadet):
         surface.blit(self.background, (0,0))
 
-        if self.display_mode == "choose":
-            surface.blit(cadet.sprites[10], (55,110))
+        surface.blit(cadet.sprites[10], (55, 110))
 
-            surface.blit(self.opponent.show_base(), (155,110))
+        surface.blit(self.opponent.show_base(), (215, 110))
+
+        ## Status Bars
+        health_blocks = (cadet.health/cadet.max_health)*63
+        for i in range(0,health_blocks): surface.blit(health_block, (9+i*2, 9))
+        morale_blocks = (cadet.morale/cadet.max_morale)*63
+        for i in range(0,morale_blocks): surface.blit(morale_block, (9+i*2, 31))
+
+        surface.blit(overlay, (7,7))
+        surface.blit(overlay, (7,29))
+
+        if self.display_mode == "choose":
 
             if self.level == 0:
                 surface.blit(self.pointer, (14 + (self.decision % 2) * 137, 198 + (self.decision / 2) * 45))
@@ -311,12 +336,13 @@ class CombatBox:
                 for line in self.message:
                     text_object = self.font.render(line, 1, (255, 255, 255))
                     text_rect = text_object.get_rect()
-                    text_rect.topleft = (30, 210 + delta)
+                    text_rect.topleft = (30, 205 + delta)
                     delta += 20
                     surface.blit(text_object, text_rect)
 
             elif self.response[0] == 1:
-                print "parse self.response[2]"
+                self.mini_game.gen_map(map_01)
+                damage = self.opponent.strength - self.opponent.strength*(self.mini_game.run(surface)/30)*(2/3)
                 self.response[0] = 2
                 self.update_message()
 
@@ -326,11 +352,9 @@ class CombatBox:
                 for line in self.message:
                     text_object = self.font.render(line, 1, (255, 255, 255))
                     text_rect = text_object.get_rect()
-                    text_rect.topleft = (30, 210 + delta)
+                    text_rect.topleft = (30, 205 + delta)
                     delta += 20
                     surface.blit(text_object, text_rect)
-
-        print self.response[0]
 
         pygame.display.update()
 

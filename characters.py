@@ -6,62 +6,15 @@ from item import *
 
 choice_0 = [pygame.image.load("sprites/decal/choices/0.png"),pygame.image.load("sprites/decal/choices/1.png"),pygame.image.load("sprites/decal/choices/2.png"),pygame.image.load("sprites/decal/choices/3.png")]
 choice_1 = [pygame.image.load("sprites/decal/choices/4.png"),pygame.image.load("sprites/decal/choices/5.png")]
-#cadet_male = [["sprites/character_packs/cadet_male/"],['b-s.png','b-l.png','b-r.png',   # back = 0
-#                                                      'f-s.png','f-l.png','f-r.png',    # front= 1
-#                                                      'l-s.png','l-l.png','l-r.png',    # left = 2
-#                                                      'r-s.png','r-l.png','r-r.png']]  # right= 3
 
-cadet_other = [["sprites/character_packs/cadet_other/"],['b-s.png','b-l.png','b-r.png',   # back = 0
-                                                      'f-s.png','f-l.png','f-r.png',    # front= 1
-                                                      'l-s.png','l-l.png','l-r.png',    # left = 2
-                                                      'r-s.png','r-l.png','r-r.png']]
-
-cadet_NPC = [["sprites/character_packs/cadet_other/"],['b-s.png','b-l.png','b-r.png',   # back = 0
-                                                      'f-s.png','f-l.png','f-r.png',    # front= 1
-                                                      'l-s.png','l-l.png','l-r.png',    # left = 2
-                                                      'r-s.png','r-l.png','r-r.png'],  # right= 3
-                                                     ['b.png','f.png','l.png','r.png']]
-
-female_white_ginger = [["sprites/character_packs/ladies/red/hair-down/"],['b-s.png','b-l.png','b-r.png',   # back = 0
-                                                                          'f-s.png','f-l.png','f-r.png',    # front= 1
-                                                                          'l-s.png','l-l.png','l-r.png',    # left = 2
-                                                                          'r-s.png','r-l.png','r-r.png'],  # right= 3
-                                                                        ['b.png','f.png','l.png','r.png']]
-
-female_white_brown = [["sprites/character_packs/ladies/brown/bun/"],['b-s.png','b-l.png','b-r.png',   # back = 0
-                                                                          'f-s.png','f-l.png','f-r.png',    # front= 1
-                                                                          'l-s.png','l-l.png','l-r.png',    # left = 2
-                                                                          'r-s.png','r-l.png','r-r.png'],  # right= 3
-                                                                        ['b.png','f.png','l.png','r.png']]
-
-#mother = [["sprites/character_packs/mother/"],['b-s.png','b-l.png','b-r.png',   # back = 0
-#                                                      'f-s.png','f-l.png','f-r.png',    # front= 1
-#                                                      'l-s.png','l-l.png','l-r.png',    # left = 2
-#                                                      'r-s.png','r-l.png','r-r.png']]
-
-class SpritePack_NPC:
-    def __init__(self, spritesList):
-        self.sprites = [[],[]]
-        for img in spritesList[1]:
-            self.sprites[0].append(pygame.image.load(spritesList[0][0]+img))
-        for img in spritesList[2]:
-            self.sprites[1].append(pygame.image.load(spritesList[0][0]+"front/"+img))
-    def get(self, j, i):
-        return self.sprites[j][i]
-
-class SpritePack:
-    def __init__(self, spritesList):
-        self.sprites = []
-        for img in spritesList[1]:
-            self.sprites.append(pygame.image.load(spritesList[0][0]+img))
-    def __getitem__(self, i):
-        return self.sprites[i]
 
 class Player:
     def __init__(self, spritePack, x, y):
         self.sprites = spritePack
         self.status_bar = pygame.image.load("sprites/status/status_bar.png")
         self.health = 100; self.max_health = 100
+        self.morale = 100; self.max_morale = 100
+        self.strength = 10
         self.x = x
         self.y = y
         self.face = 0
@@ -99,7 +52,7 @@ class Player:
         if ((self.x+2+167)/32+((self.y+167)/32)*width) not in bounds and ((self.x+2+167)/32+((self.y+139)/32)*width) not in bounds:
             self.x += 2
 
-# TODO: Add Current_TEXT int and next_TEXT list
+
 class NPC:
     def __init__(self, spritePack, x, y, face, text_block):
         self.sprites = spritePack
@@ -176,21 +129,28 @@ class NPC:
         elif face == 2: self.face = 3
         else: self.face = 2
 
+
 class Combatant(NPC):
     def __init__(self, spritePack, x, y, face, text_block):
         NPC.__init__(self, spritePack, x, y, face, text_block)
         self.escape_chance = 0
+        self.health = 100; self.max_health = 100
+        self.morale = 100; self.max_morale = 100
+        self.strength = 5
+        self.target = 0
+        self.analyzed = 3
 
     def escape_chance(self):
         return 1
 
     def analyze(self):
-        return "analyzing"
+        if self.analyzed > 0:
+            return "analyzing"
+        else:
+            return "analyzed"
 
     def leave(self):
         return "leaving"
-
-
 
 
 class Text_Block:
@@ -201,13 +161,12 @@ class Text_Block:
         self.next_text = next_text
 
 
-
 class Blocker(NPC):
     def __init__(self, x, y, f):
-        NPC.__init__(self, SpritePack_NPC(cadet_NPC),x,y,f,blocker_text)
+        NPC.__init__(self, cadet_npc,x,y,f,blocker_text)
 
-ginger1 = SpritePack_NPC(female_white_ginger)
-brown1 = SpritePack_NPC(female_white_brown)
+ginger1 = female_white_ginger
+brown1 = female_white_brown
 
 default_text = Text_Block(["This is the first line",
                            "This is the second line",
@@ -237,8 +196,8 @@ blocker_text = Text_Block(["Sorry, bro.",
                           "..."], [],-1,[])
 basic_blocker = Blocker(32,64,1)
 
-blocker_001 = NPC(SpritePack_NPC(cadet_NPC),30,156,3,blocker_text)
-blocker_002 = NPC(SpritePack_NPC(cadet_NPC),130,156,2,blocker_text)
+blocker_001 = NPC(cadet_npc,30,156,3,blocker_text)
+blocker_002 = NPC(cadet_npc,130,156,2,blocker_text)
 
 #mother_home = NPC(SpritePack(mother),96,96,["Hey, Jake",
 #                                            "Are you excited?",
@@ -247,7 +206,7 @@ blocker_002 = NPC(SpritePack_NPC(cadet_NPC),130,156,2,blocker_text)
 text_D = ["What?","What do you still want?","",""]
 empty_res = Text_Block(text_D,[],-1,[])
 
-cadet_000 = NPC(SpritePack_NPC(cadet_NPC),258,96,1,Text_Block(text_000,choice_0,0,[empty_res,empty_res,empty_res,empty_res]))
+cadet_000 = NPC(cadet_npc,258,96,1,Text_Block(text_000,choice_0,0,[empty_res,empty_res,empty_res,empty_res]))
 
 text_001 = ["Hey, word spreads fast here. I",
             "heard what you said to Steve. You",
@@ -298,7 +257,7 @@ text_006 = ["Okay, cool. Just remember that",
             "",
             ""]
 
-cadet_001 = Combatant(SpritePack_NPC(cadet_NPC),34,64,1,Text_Block(text_001,choice_0,0,[
+cadet_001 = Combatant(cadet_npc,34,64,1,Text_Block(text_001,choice_0,0,[
                                                             Text_Block(text_001,[],1,[empty_res]),
                                                             Text_Block(text_002,choice_1,1,[
                                                                 Text_Block(text_005,[],2,[empty_res]),

@@ -147,6 +147,12 @@ class Controller(object):
         cx = 100
         cy = 100
         while (counter < 135):
+
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    pygame.quit()
+                    sys.exit()
+
             if counter < 30:
                 self.fade.set_alpha(255 - 255/29*counter)
 

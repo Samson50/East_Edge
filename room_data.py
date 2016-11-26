@@ -118,6 +118,7 @@ class Room:
                 surface = self.cheap_display(surface, cadet)
                 pygame.display.update()
                 return self.non_player_characters[i].talk_to(text_box, fpsClock, FPS, surface)
+            else: return "Moving"
 
         elif cadet.face == 1:
             if (X + (Y + 1) * self.width) in self.actionable:
@@ -126,6 +127,7 @@ class Room:
                 surface = self.cheap_display(surface, cadet)
                 pygame.display.update()
                 return self.non_player_characters[i].talk_to(text_box, fpsClock, FPS, surface)
+            else: return "Moving"
 
         elif cadet.face == 2:
             if (X - 1 + Y * self.width) in self.actionable:
@@ -134,6 +136,7 @@ class Room:
                 surface = self.cheap_display(surface, cadet)
                 pygame.display.update()
                 return self.non_player_characters[i].talk_to(text_box, fpsClock, FPS, surface)
+            else: return "Moving"
 
         elif cadet.face == 3:
             if (X + 1 + Y * self.width) in self.actionable:
@@ -142,6 +145,7 @@ class Room:
                 surface = self.cheap_display(surface, cadet)
                 pygame.display.update()
                 return self.non_player_characters[i].talk_to(text_box, fpsClock, FPS, surface)
+            else: return "Moving"
 
         else:
             return "Moving"
@@ -173,7 +177,7 @@ hallway = Room(hallway,
            [36,90,29],
            [[54,262,9],[-74,262,9],[-104,22,6]],
            [0,2,3],     #next room index
-           [NPC(SpritePack_NPC(cadet_NPC),34,94,0,default_text)],
+           [NPC(cadet_npc,34,94,0,default_text)],
            [19],
             6)
 
@@ -207,7 +211,7 @@ barracks0 = Room(barracks_a,
             [123],
             [[-104,54,6]],
             [1],    #next room index
-            [NPC(SpritePack_NPC(cadet_NPC),34,128,0,default_text)],
+            [NPC(cadet_npc,34,128,0,default_text)],
             [37],
              9)
 
@@ -237,7 +241,7 @@ barracks1 = Room(barracks_b,
             [119],
             [[-104,342,6]],
             [1],    #next room index
-            [NPC(SpritePack_NPC(cadet_NPC),34,128,1,default_text)],
+            [NPC(cadet_npc,34,128,1,default_text)],
              [37],
               9)
 
@@ -380,7 +384,7 @@ sally_port = Room(sally_port_img,
                   [62],
                   [[-54,56,6]],
                   [4],
-                  [cadet_000, NPC(ginger1,128,224,1,blocker_text),NPC(brown1,128,256,0,blocker_text)],
+                  [cadet_000, NPC(female_white_ginger,128,224,1,blocker_text),NPC(female_white_brown,128,256,0,blocker_text)],
                   [62,130],
                   18)
 

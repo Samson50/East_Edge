@@ -105,8 +105,10 @@ class TextBox:
                         self.message_marker = 0
                         self.message = ["", "", "", ""]
                         return "Cut_Scene"
+
                     elif ("ATK" in text_block.text[self.message_marker]):
                         story.decisions[text_block.result] = 0
+                        print story.decisions
                         story.opponent = int(text_block.text[self.message_marker].split(" ")[1])
                         self.message_marker = 0
                         self.message = ["","","",""]
@@ -127,17 +129,30 @@ class Choice:
     def show(self, surface):
         surface.blit(self.image, (self.x, self.y))
 
-
+# Response format:
+#[ Int: Index of current action, [Text List: first response], [damage quantity, damage target (0 = health, 1 = morale)], [Text List: second response]]
+#
 class Attack(Choice):
     def __init__(self):
         Choice.__init__(self,act_attack, 79-act_attack.get_width()/2, 207)
 
     def run(self, cadet, opponent):
         damage = cadet.strength + (cadet.strength/10)*(random.randint(0,5)/5)
-        opponent.health -= damage
-        return [0,["You muster your strength and take",
+        res = [0,["You muster your strength and take",
                    "a swing at your opponent's face...",
-                   "... Your swing connects, causing","{0} damage".format(damage)],[],["Text 2","","","", "ATE"]]
+                   "... Your swing connects, causing",
+                   "{0} damage".format(damage)],[damage, 0]]
+        res += [["Enraged, CDT {0} retaliates!".format(opponent.name),
+                 "He screams obscenities as he",
+                 "throws a right cross at your",
+                 "face!",
+                 "OPP 0 0"]]
+        res += [["The hit connects!",
+                 "You stagger backward,",
+                 "taking {0} physical damage",
+                 "",
+                 "ATE"]]
+        return res
 
 
 class NCOR(Choice):
@@ -145,7 +160,39 @@ class NCOR(Choice):
         Choice.__init__(self, act_NCOR, 213-act_NCOR.get_width()/2, 207)
 
     def run(self, cadet, opponent):
-        return [0, ["Text 1", "", "", ""], [], ["Text 2", "", "", "", "ATE"]]
+        res = []
+        if opponent.NCOR_effect == 1:
+            morale_damage = cadet.eloquence + (cadet.eloquence / 10) * (random.randint(0, 5) / 5)
+            res += [0, ["You write a strongly worded NCOR",
+                        "on CDT {0} and send it to their".format(opponent.name),
+                        "chain of command. CDT {0}".format(opponent.name),
+                        "takes {0} points of morale damage.".format(morale_damage)], [morale_damage, 1]]
+            res += [["CDT {0} gives you a strongly worded".format(opponent.name),
+                     "piece of their mind. Nobody likes",
+                     "the guy who writes NCORs all the",
+                     "time...",
+                     "OPP 0 1"]]
+            res += [["CDT {0}'s rebuke causes".format(opponent.name),
+                     "you to question yourself...",
+                     "you take {0} points of morale",
+                     "damage",
+                     "ATE"]]
+        else:
+            res += [0, ["You write a strongly worded NCO",
+                        "on CDT {0} and send it to their".format(opponent.name),
+                        "chain of command. CDT {0}".format(opponent.name),
+                        "straight-up doesn't give a fuck."], [0, 0]]
+            res += [["CDT {0} viciously mocks".format(opponent.name),
+                     "you for your naive attempt",
+                     "to shame them into compliance.",
+                     "That's embarrassing...",
+                     "OPP 0 1"]]
+            res += [["Your shaming backfired!",
+                     "Your weak leadership caused",
+                     "you to take {0} points of",
+                     "morale damage",
+                     "ATE"]]
+        return res
 
 
 class Lead(Choice):
@@ -153,7 +200,32 @@ class Lead(Choice):
         Choice.__init__(self, act_lead, 79-act_lead.get_width()/2, 252)
 
     def run(self, cadet, opponent):
-        return [0, ["Text 1", "", "", ""], [], ["Text 2", "", "", "", "ATE"]]
+        res = [0, ["You harness the power of",
+                   "your inspirational leadership",
+                   "to bring CDT {0} into line".format(opponent.name),
+                   "with the standard."],
+               [0, 0]]
+
+        if opponent.helped >= opponent.help_needed:
+            res += [["You can haz leading",
+                    "",
+                    "",
+                    "",
+                    "END 0 {0} 1".format(opponent.result)]]
+
+        else:
+            res += [["CDT {0} is not impressed with".format(opponent.name),
+                    "your feigned leadership. Maybe",
+                    "if you cared, your leadership",
+                    "would be more effective...",
+                    "OPP 0 1"]]
+            res += [["CDT {0}'s rejection of your".format(opponent.name),
+                     "leadership causes you to ",
+                     "question yourself. you take {0}",
+                     "morale damage.",
+                     "ATE"]]
+
+        return res
 
 
 class Help(Choice):
@@ -161,7 +233,51 @@ class Help(Choice):
         Choice.__init__(self, act_help, 213-act_help.get_width()/2, 252)
 
     def run(self, cadet, opponent):
-        return [0, ["Text 1", "", "", ""], [], ["Text 2", "", "", "", "ATE"]]
+        opponent.helped += 1
+        res = [0, ["You genuinely try to help",
+                   "CDT {0} understand what".format(opponent.name),
+                   "they are doing wrong...",
+                   ""]]
+        if opponent.helped > opponent.help_needed:
+            damage = (opponent.helped/opponent.help_needed)*cadet.eloquence*85/100
+            res[1] += ["CDT {0} shuffles awkwardly".format(opponent.name),
+                       "as you continue to berate them",
+                       "CDT {0} takes {1} additional".format(opponent.name,damage),
+                       "morale damage..."]
+            res += [[damage,1]]
+            res += [["CDT {0} appears defeated".format(opponent.name),
+                    "no action is taken against",
+                    "you.",
+                    "",
+                    "ATE"]]
+        elif opponent.helped == opponent.help_needed:
+            res[1] += ["CDT {0} now understands why".format(opponent.name),
+                       "they are wrong. They look at",
+                       "you with the appreciation that",
+                       "accompanies professional development"]
+            res += [[0,1]]
+            res += [["CDT {0} is too busy bathing".format(opponent.name),
+                    "in the warm light of your",
+                    "professionalism to retaliate",
+                    "you take no damage.",
+                    "ATE"]]
+        else:
+            res[1] += ["CDT {0} glares at you warily.".format(opponent.name),
+                       "Being corrected sucks...",
+                       "but maybe you have a point...",
+                       ""]
+            res += [[0,1]]
+            res += [["CDT {0} mocks you for".format(opponent.name),
+                    "drinking the Kool-Aid and",
+                    "thinking you're better than",
+                    "everyone else...",
+                    "OPP 0 1"]]
+            res += [["You question yourself for",
+                    "a moment...",
+                    "You take {0} points of",
+                    "morale damage",
+                    "ATE"]]
+        return res
 
 
 class CombatBox:
@@ -187,6 +303,10 @@ class CombatBox:
         self.font = pygame.font.Font(None, 20)
         self.temp_items = []
         self.mini_game = MiniGame()
+        self.mini_map = 0
+        self.opp_target = 0
+        self.fade = pygame.image.load("surfaces/fade.png").convert()
+        self.fade_out = 0
 
     def set_up(self,opponent,cadet):
         cadet.face = 1
@@ -199,22 +319,28 @@ class CombatBox:
 
     def analyze(self):
         first = [0,["You take a moment and try to","analyze the situation","",""]]
-        first += [[],["You notice some thing","","","","ATE"]]
+        first += [[0, 0],["You notice some thing","","","","ATE"]]
         return first
 
     def leave(self):
         ## Generate Randomly
         escape = 0
         if escape < self.opponent.escape_chance:
-            return [0,["You try to leave","","",""],[],["You leave the opponent confused.","","","","ATE"]]
+            return [0,["You try to leave", "", "", ""], [0, 0], ["You leave the opponent confused.", "", "", "", "ATE"]]
         else:
-            return [0,["You try to leave...","","",""],[],["But you can't get away that easily!","","","","ATE"]]
+            return [0,["You try to leave...", "", "", ""], [0, 0], ["But you can't get away that easily!", "", "", "", "OPP 0 1"], ["CDT {0} mocks you for your",
+                                                                                                                                    "cowardice in trying to flee",
+                                                                                                                                    "you take {0} morale damage",
+                                                                                                                                    "",
+                                                                                                                                    "ATE"]]
 
     def update_message(self):
         if self.response[0] == 0:
             if self.text == []: self.text = self.response[1]
-        else:
+        elif self.response[0] == 2:
             if self.text == []: self.text = self.response[3]
+        elif self.response[0] == 4:
+            if self.text == []: self.text = self.response[4]
         for i in range(0, 4):
             if self.message_marker == len(self.text):
                 self.message_marker = 0
@@ -231,6 +357,20 @@ class CombatBox:
                     self.level = 0
                     self.decision = 0
                     break
+                elif ("OPP" in self.text[self.message_marker]):
+                    self.mini_map = int(self.text[self.message_marker].split(" ")[1])
+                    self.opp_target = int(self.text[self.message_marker].split(" ")[2])
+                    self.message_marker = 0
+                    self.text = []
+                    self.message = ["", "", "", ""]
+                    self.response[0] += 1
+                    break
+                elif ("END" in self.text[self.message_marker]):
+                    # End format: END [end type, who lost] [story point] [result val] [follow on?]
+                    res = self.text[self.message_marker].split(" ")
+                    self.display_mode = "ending"
+                    self.end_type = res[1]
+                    story.decisions[int(res[2])] = int(res[3])
                 else:
                     self.message[i] = self.text[self.message_marker]
                     self.message_marker += 1
@@ -280,7 +420,7 @@ class CombatBox:
                                 self.update_message()
 
                     elif self.display_mode == "action":
-                        if self.response[0] == 0 or self.response[0] == 2:
+                        if self.response[0] == 0 or self.response[0] == 2 or self.response[0] == 4:
                             self.update_message()
                         #if self.response[0] == 1:
                         #    self.response[0] += 1
@@ -300,13 +440,21 @@ class CombatBox:
         surface.blit(self.opponent.show_base(), (215, 110))
 
         ## Status Bars
-        health_blocks = (cadet.health/cadet.max_health)*63
+        health_blocks = ((cadet.health*64)/cadet.max_health)*63/64
         for i in range(0,health_blocks): surface.blit(health_block, (9+i*2, 9))
-        morale_blocks = (cadet.morale/cadet.max_morale)*63
+        morale_blocks = ((cadet.morale*64)/cadet.max_morale)*63/64
         for i in range(0,morale_blocks): surface.blit(morale_block, (9+i*2, 31))
+
+        ## Opponent Status
+        opponent_health = ((self.opponent.health*64)/(self.opponent.max_health))*63/64
+        for i in range(0, opponent_health): surface.blit(health_block, (164+i*2, 9))
+        opponent_morale = ((self.opponent.morale*64)/self.opponent.max_morale)*63/64
+        for i in range(0,opponent_morale): surface.blit(morale_block, (164+i*2, 31))
 
         surface.blit(overlay, (7,7))
         surface.blit(overlay, (7,29))
+        surface.blit(overlay, (162,7))
+        surface.blit(overlay, (162,29))
 
         if self.display_mode == "choose":
 
@@ -327,8 +475,6 @@ class CombatBox:
                     for item in range(0,len(self.items)):
                         self.items[item].show(surface,15+(item%8)*34,199+(item/8)*34)
 
-
-
         if self.display_mode == "action":
             if self.response[0] == 0:
                 surface.blit(self.text_box, (4,188))
@@ -341,10 +487,16 @@ class CombatBox:
                     surface.blit(text_object, text_rect)
 
             elif self.response[0] == 1:
-                self.mini_game.gen_map(map_01)
-                damage = self.opponent.strength - self.opponent.strength*(self.mini_game.run(surface)/30)*(2/3)
-                self.response[0] = 2
+                print self.response[2][1]
+                print self.response[2][0]
+                if self.response[2][1] == 0:
+                    self.opponent.health -= self.response[2][0]
+                else:
+                    self.opponent.morale -= self.response[2][0]
+
+                self.response[0] += 1
                 self.update_message()
+
 
             elif self.response[0] == 2:
                 surface.blit(self.text_box, (4, 188))
@@ -356,7 +508,40 @@ class CombatBox:
                     delta += 20
                     surface.blit(text_object, text_rect)
 
+            elif self.response[0] == 3:
+                if (self.mini_map != 99):
+                    self.mini_game.gen_map(mini_maps[self.mini_map])
+                    self.opp_damage = self.opponent.strength - self.opponent.strength * (self.mini_game.run(surface) / 30) #* (2 / 3)
+                    self.response[4][2] = self.response[4][2].format(self.opp_damage)
+                self.response[0] += 1
+                self.update_message()
+                if self.opp_target == 0:
+                    self.cadet.health -= self.opp_damage
+                else:
+                    self.cadet.morale -= self.opp_damage
+
+            elif self.response[0] == 4:
+                surface.blit(self.text_box, (4, 188))
+                delta = 0
+                for line in self.message:
+                    text_object = self.font.render(line, 1, (255, 255, 255))
+                    text_rect = text_object.get_rect()
+                    text_rect.topleft = (30, 205 + delta)
+                    delta += 20
+                    surface.blit(text_object, text_rect)
+
+        if self.display_mode == "ending":
+            if (self.fade_out < 255):
+                self.fade_out += 5
+                self.fade.set_alpha(self.fade_out)
+                surface.blit(self.fade, (0,0))
+
+            else:
+                print story.decisions
+                return "Post-Fight"
+
         pygame.display.update()
+        return "Fighting"
 
 
 

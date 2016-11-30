@@ -139,7 +139,10 @@ class Controller(object):
             self.combat.set_up(self.room.non_player_characters[story.opponent], self.cadet)
             while self.mode == "Fighting":
                 self.combat.get_events(self.surface)
-                self.combat.show(self.surface, self.cadet)
+                self.mode = self.combat.show(self.surface, self.cadet)
+            if self.mode == "Post-Fight":
+                self.room.display(self.surface, self.cadet)
+                self.mode = self.room.non_player_characters[story.opponent].talk_to(self.text_box, fpsClock, FPS, self.surface)
 
     def intro(self):
         counter = 0

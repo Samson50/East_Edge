@@ -71,6 +71,7 @@ class MiniGame:
         self.obstacles = []
         self.enemies = []
         self.goal = []
+        self.result_text = []
 
     def gen_map(self, map_matrix):
         self.tiles = []
@@ -99,7 +100,7 @@ class MiniGame:
         while(self.running):
             ## Get Events
             for event in pygame.event.get():
-                if event.type == QUIT: ## or (event.type == KEYDOWN and event.key == K_ESCAPE):
+                if event.type == QUIT:
                     pygame.quit()
                     sys.exit()
 
@@ -159,10 +160,6 @@ class MiniGame:
 
             ## move tile
             for tile in self.tiles + self.enemies + self.obstacles + self.goal: tile.rect.x += x_delt
-            ##for tile in tiles:
-            ##    if tile.rect.x == l_lim - 48:
-            ##        tile.rect.x = r_lim + 38
-            ## tiles moved
 
             ## Update Positions
             ## Update x

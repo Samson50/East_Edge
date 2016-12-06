@@ -94,7 +94,16 @@ class Menu:
         else:
             restore_steps = save["restore"]
             for step in restore_steps:
-                print step
+                change = step.split(":")
+                if change[0] == "N":
+                    print "got it"
+                    ## Move action
+                    ROOMS[int(change[1])].non_player_characters[ROOMS[int(change[1])].actionable.index(int(change[2]))].x = int(change[4])
+                    ROOMS[int(change[1])].non_player_characters[ROOMS[int(change[1])].actionable.index(int(change[2]))].y = int(change[5])
+                    ROOMS[int(change[1])].actionable[ROOMS[int(change[1])].actionable.index(int(change[2]))] = int(change[3])
+                    ## Move bound
+                    del ROOMS[int(change[1])].bounds[ROOMS[int(change[1])].bounds.index(int(change[2]))]
+                    ROOMS[int(change[1])].bounds.append(int(change[3]))
             story.decisions = save["decisions"]
             story.current_save = self.decision
             ret = (ROOMS[save["room"]], save["cdt-x"], save["cdt-y"])

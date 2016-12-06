@@ -12,6 +12,16 @@ stairwell_ground = pygame.image.load("surfaces/CADET_stairwell_ground.png")
 home_main = pygame.image.load("surfaces/HOME_main.png")
 home_player = pygame.image.load("surfaces/HOME_room.png")
 
+## Pause ##
+
+pack_img = pygame.image.load("surfaces/paused/pack.png")
+pause_img = pygame.image.load("surfaces/paused/pause.png")
+quit_img = pygame.image.load("surfaces/paused/quit.png")
+pause_top = pygame.image.load("surfaces/paused/pause_top.png")
+pause_mid = pygame.image.load("surfaces/paused/pause_mid.png")
+pause_bottom = pygame.image.load("surfaces/paused/pause_bottom.png")
+pause_select = pygame.image.load("surfaces/paused/pause_select.png")
+
 ## Objects ##
 
 door_barracks = pygame.image.load("sprites/objects/CADET_door.png")
@@ -123,7 +133,11 @@ mini_frame = pygame.image.load("surfaces/combat/mini_game/frame.png")
 
 emblem = pygame.image.load("sprites/decal/emblem.png")
 play_button = pygame.image.load("sprites/decal/play_button.png")
+load_button = pygame.image.load("sprites/decal/load_button.png")
 logo = pygame.image.load("sprites/decal/game_menu.png")
+load_tile = pygame.image.load("sprites/decal/load_tile.png")
+load_select = pygame.image.load("sprites/decal/load_select.png")
+empty_tile = pygame.image.load("sprites/decal/empty_tile.png")
 
 ## Special ##
 

@@ -16,13 +16,20 @@ class Room:
         self.non_player_characters = non_player_characters
         self.actionable = actionable
         self.width = width
+        self.direction = 0
+        self.direction_pressed = 0
+        self.next_dir = 0
+        self.move_counter = 0
+        self.last_dir = 0
 
         ##== Externally Used Variables ==##
         self.text = []
 
     def change_rooms(self,x,y,ROOMS):
+        self.move_counter = 0
         index = self.exits.index(((x+139)/32)+self.width*((y+139)/32))
-        new_room = ROOMS[self.adjacent[index]]
+        story.current_room = self.adjacent[index]
+        new_room = ROOMS[story.current_room]
         positions = self.entrance[index]
         return  (new_room,positions[0],positions[1])
 
@@ -72,40 +79,86 @@ class Room:
         return surface
 
 
-    def getEvents(self, cadet, text_box, fpsClock, FPS, surface):
+    def getEvents(self, cadet, text_box, pause_menu, fpsClock, FPS, surface):
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
 
+            if event.type == KEYDOWN and event.key == K_ESCAPE:
+                return pause_menu.run(surface, cadet)
+
             if event.type == KEYDOWN and event.key == K_f:
                 return self.action(cadet,text_box, fpsClock, FPS, surface)
 
+            if event.type == KEYDOWN and event.key in [K_LEFT, K_DOWN, K_UP, K_RIGHT]:
+                if self.direction_pressed == 0:
+                    self.direction_pressed = event.key
+                elif event.key != self.direction_pressed:
+                    self.next_dir = event.key
+
+        #TODO: Implement fps counter every 16 ticks
+        if self.direction == 0:
+            self.direction = self.direction_pressed
+            self.move_counter = 16
+
         buttons = pygame.key.get_pressed()
 
-        if buttons[pygame.K_UP] or buttons[pygame.K_DOWN] or buttons[pygame.K_LEFT] or buttons[pygame.K_RIGHT]:
-            self.move(buttons, cadet)
+        if not buttons[self.direction_pressed]:
+            self.direction_pressed = self.last_dir
+            self.last_dir = 0
+        elif buttons[self.next_dir]:
+            self.last_dir = self.direction_pressed
+            self.direction_pressed = self.next_dir
+            self.next_dir = 0
+
+        if self.move_counter == 0:
+            print cadet.x
+            print cadet.y
+            self.direction = self.direction_pressed
+            if self.direction != 0:
+                self.move_counter = 16
+
+        #if buttons[pygame.K_UP] or buttons[pygame.K_DOWN] or buttons[pygame.K_LEFT] or buttons[pygame.K_RIGHT]:
+        if self.direction != 0:
+            self.move_counter -= 1
+            self.move(cadet)
         else: cadet.pace = 0
+
 
         if ((cadet.x+139)/32+((cadet.y+139)/32)*self.width) in self.exits:
             return "Changing_Rooms"
 
         return "Moving"
 
-    def move(self, buttons, cadet):
-        print cadet.x
-        print cadet.y
+    def pause(self, surface):
+        paused = True
+        pointer = 0
+        while paused:
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == KEYDOWN:
+                    if event.key == K_UP:
+                        pointer -= 1
+                    if event.key == K_DOWN:
+                        pointer += 1
+
+        return "Moving"
+
+    def move(self, cadet):
         cadet.pace += 1
-        if (buttons[pygame.K_UP]):
+        if (self.direction == pygame.K_UP):
             cadet.move_up(self.width, self.bounds)
 
-        if (buttons[pygame.K_DOWN]):
+        if (self.direction == pygame.K_DOWN):
             cadet.move_down(self.width, self.bounds)
 
-        if (buttons[pygame.K_LEFT]):
+        if (self.direction == pygame.K_LEFT):
             cadet.move_left(self.width, self.bounds)
 
-        if (buttons[pygame.K_RIGHT]):
+        if (self.direction == pygame.K_RIGHT):
             cadet.move_right(self.width, self.bounds)
 
     def action(self, cadet, text_box, fpsClock, FPS, surface):
@@ -349,20 +402,20 @@ home_main = Room(home_main,
 m1_stairwell = Room(stairwell_ground,
              [[decal_m1,62,150]],
              [],
-             [0, 1, 2, 3, 4, 5,
-              6, 7, 8, 9,10,11,
-             12,13,14,15,16,17,
-             18,            23,
-             24,            29,
-             30,31,      34,35,
-             36,            41,
-             42,43,      46,47],
-             [13,44,45],
+             [0, 1, 2, 3, 4, 5, 6,
+              7, 8, 9,10,11,12,13,
+             14,15,16,17,18,19,20,
+             21,               27,
+             28,               34,
+             35,36,         40,41,
+             42,               48,
+             49,50,51,   53,54,55],
+             [13,52],
              [[-10,-42,6],[118,-10,18],[118,-10,18]],
-             [3, 7, 7],
+             [3, 7],
              [blocker_001,cadet_001,blocker_002],
              [31,13,34],
-              6)
+              7)
 
 sally_port = Room(sally_port_img,
                   [],
@@ -382,10 +435,10 @@ sally_port = Room(sally_port_img,
                    216,    218,                                            230,    232,
                    234,    236,237,238,239,240,241,242,243,244,245,246,247,248,249,250],
                   [62],
-                  [[-54,56,6]],
+                  [[-42,54,7]],
                   [4],
-                  [cadet_000, NPC(female_white_ginger,128,224,1,blocker_text),NPC(female_white_brown,128,256,0,blocker_text)],
-                  [62,130],
+                  [cadet_000, NPC(female_white_ginger,131,213,1,blocker_text),NPC(female_white_brown,131,245,0,blocker_text)],
+                  [62,130,148],
                   18)
 
 ROOMS = [Mac_401, hallway, barracks1, m2_stairwell, m1_stairwell, home_room, home_main, sally_port]

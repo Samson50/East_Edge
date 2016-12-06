@@ -10,8 +10,8 @@ from mini_game import *
 
 ##== Cut-Scenes ==##
 m_o = [["00:d"]*16+["00:r"]*16+["00:d"]*48+["00:r"]*16+["00:d"]*32+["00:r"]*16+["C:2:64:56"],[]]
-s_00 = [["M:d"]*17+["M:u"]+["00:d"]*16+["00:l"]*16+["00:f:2"]+["N:62:79"], []]
-s_01 = [["M:r"]*16+["01:d"]*28+["01:r"]*16+["01:d"]*32+["01:l"]*18+["01:f:2"]+["N:13:37"], []]
+s_00 = [["M:d"]*17+["M:u"]+["00:d"]*16+["00:l"]*16+["00:f:2"]+["N:62:79"], ["7:N:62:79"]]
+s_01 = [["M:r"]*16+["01:d"]*28+["01:r"]*16+["01:d"]*32+["01:l"]*18+["01:f:2"]+["N:13:37"], ["4:N:13:37"]]
 
 cut_scenes = [m_o,s_00,s_01]
 
@@ -529,6 +529,18 @@ class CombatBox:
                     text_rect.topleft = (30, 205 + delta)
                     delta += 20
                     surface.blit(text_object, text_rect)
+
+        if self.cadet.health <= 0:
+            print "health end"
+
+        if self.cadet.morale <= 0:
+            print "morale end"
+
+        if self.opponent.health <=0:
+            print "health win"
+
+        if self.opponent.morale <= 0:
+            print "morale win"
 
         if self.display_mode == "ending":
             if (self.fade_out < 255):

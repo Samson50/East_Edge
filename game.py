@@ -1,9 +1,10 @@
-import pygame, sys, random, story
+import pygame, sys, random, story, shelve
 from pygame.locals import *
 from menu import *
 from interaction import *
 from characters import *
 from images import *
+from pause import *
 
 fpsClock = pygame.time.Clock()
 FPS = 70
@@ -21,23 +22,29 @@ class Controller(object):
         self.rooms = ROOMS
         self.room = ROOMS[0]
         self.combat = CombatBox()
+        self.pause = PauseMenu()
         self.width = 0
         self.fade_count = 0
         self.fade = pygame.image.load("surfaces/fade.png").convert()
         self.cut_scene_counter = 0
+        self.saves = self.load_saves()
 
     def run(self):
         while True:
             while self.mode == "Moving":
-                self.mode = self.room.getEvents(self.cadet, self.text_box, fpsClock, FPS, self.surface)
+                self.mode = self.room.getEvents(self.cadet, self.text_box, self.pause, fpsClock, FPS, self.surface)
                 self.room.display(self.surface, self.cadet)
                 fpsClock.tick(FPS)
 
             while self.mode == "Menu":
                 self.mode = self.menu.run(fpsClock)
-                if self.mode == "Moving":
-                    (self.room, self.cadet.x, self.cadet.y) = self.menu.start_game()
                 fpsClock.tick(FPS)
+
+            while self.mode == "Loading":
+                self.mode = self.menu.run_load(fpsClock, self.saves)
+                if self.mode == "Moving":
+                    (self.room, self.cadet.x, self.cadet.y) = self.menu.load_slot()
+                    print "loaded"
 
             while self.mode == "Changing_Rooms":
                 self.fade_count += 5
@@ -124,10 +131,11 @@ class Controller(object):
                 self.cut_scene_counter += 1
 
                 if self.cut_scene_counter >= len(directions[0]):  # make 32 class variable
-                    for clean_up in directions[1]:
-                        self.room.actionable[clean_up[0]] = clean_up[2]
-                        self.room.bounds.remove(clean_up[1])
-                        self.room.bounds.append(clean_up[2])
+                    #for clean_up in directions[1]:
+                    #    self.room.actionable[clean_up[0]] = clean_up[2]
+                    #    self.room.bounds.remove(clean_up[1])
+                    #    self.room.bounds.append(clean_up[2])
+                    story.restore_steps += directions[1]
                     self.mode = "Moving"
 
                 self.surface = self.room.cheap_display(self.surface, self.cadet)
@@ -177,6 +185,27 @@ class Controller(object):
             self.surface.blit(self.fade,(0,0))
             fpsClock.tick(30)
             pygame.display.update()
+
+    def load_saves(self):
+        slot1 = shelve.open("saves/slot1")
+        slot2 = shelve.open("saves/slot2")
+        slot3 = shelve.open("saves/slot3")
+        slots = [slot1, slot2, slot3]
+        loads = [0, 0, 0]
+
+        for slot in [0,1,2]:
+            try:
+                if slots[slot]["file"] == "no_save":
+                    loads[slot] = 0
+                else:
+                    loads[slot] = 1
+                slots[slot].close()
+            except KeyError:
+                slots[slot]["file"] = "no_save"
+                slots[slot].close()
+                loads[slot] = 0
+        return loads
+
 
 
 

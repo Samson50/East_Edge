@@ -13,11 +13,11 @@ class Player:
     def __init__(self, spritePack, x, y):
         self.sprites = spritePack
         self.status_bar = pygame.image.load("sprites/status/status_bar.png")
-        self.health = 100;
+        self.health = 100
         self.max_health = 100
-        self.morale = 100;
+        self.morale = 100
         self.max_morale = 100
-        self.strength = 10;
+        self.strength = 10
         self.eloquence = 10
         self.x = x
         self.y = y
@@ -32,9 +32,9 @@ class Player:
         self.pace = self.pace % 32
         if self.pace < 8:
             surface.blit((self.sprites[(self.face * 3)]), (139, 127))
-        elif (self.pace < 16):
+        elif self.pace < 16:
             surface.blit((self.sprites[self.face * 3 + 1]), (139, 127))
-        elif (self.pace < 24):
+        elif self.pace < 24:
             surface.blit((self.sprites[(self.face * 3)]), (139, 127))
         else:
             surface.blit((self.sprites[self.face * 3 + 2]), (139, 127))
@@ -47,34 +47,34 @@ class Player:
 
     def move_down(self, width, bounds):
         self.face = 1
-        if ((self.x + 139) / 32 + ((self.y + 2 + 167) / 32) * width) not in bounds and (
-                        (self.x + 167) / 32 + ((self.y + 2 + 167) / 32) * width) not in bounds:
+        if ((self.x + 139) / 32 + ((self.y + 2 + 168) / 32) * width) not in bounds and (
+                        (self.x + 167) / 32 + ((self.y + 2 + 168) / 32) * width) not in bounds:
             self.y += 2
 
     def move_left(self, width, bounds):
         self.face = 2
-        if ((self.x - 2 + 139) / 32 + ((self.y + 139) / 32) * width) not in bounds and (
-                        (self.x - 2 + 139) / 32 + ((self.y + 167) / 32) * width) not in bounds:
+        if ((self.x - 2 + 136) / 32 + ((self.y + 139) / 32) * width) not in bounds and (
+                        (self.x - 2 + 136) / 32 + ((self.y + 167) / 32) * width) not in bounds:
             self.x -= 2
 
     def move_right(self, width, bounds):
         self.face = 3
-        if ((self.x + 2 + 167) / 32 + ((self.y + 167) / 32) * width) not in bounds and (
-                        (self.x + 2 + 167) / 32 + ((self.y + 139) / 32) * width) not in bounds:
+        if ((self.x + 2 + 168) / 32 + ((self.y + 167) / 32) * width) not in bounds and (
+                        (self.x + 2 + 168) / 32 + ((self.y + 139) / 32) * width) not in bounds:
             self.x += 2
 
 
 class NPC:
     def __init__(self, spritePack, x, y, face, text_block):
         self.sprites = spritePack
-        self.x = x;
+        self.x = x
         self.y = y
         self.stationary = True
-        self.face = face;
+        self.face = face
         self.pose = 0
         self.block = 14
         self.text_block = text_block
-        self.just_moved = True;
+        self.just_moved = True
         self.jm_counter = 0
         self.action = False
         self.message = ["", "", "", ""]
@@ -159,14 +159,14 @@ class Combatant(NPC):
         self.name = "Johnson"
         self.result = 2
         self.escape_chance = 0
-        self.health = 100;
+        self.health = 100
         self.max_health = 100
-        self.morale = 100;
+        self.morale = 100
         self.max_morale = 100
-        self.helped = 0;
+        self.helped = 0
         self.help_needed = 2
         self.NCOR_effect = 1
-        self.strength = 5
+        self.strength = 8
         self.eloquence = 7
         self.target = 0
         self.analyzed = 3
@@ -220,7 +220,7 @@ blocker_text = TextBlock(["Sorry, bro.",
 basic_blocker = Blocker(32, 64, 1)
 
 blocker_001 = NPC(cadet_npc, 30, 156, 3, blocker_text)
-blocker_002 = NPC(cadet_npc, 130, 156, 2, blocker_text)
+blocker_002 = NPC(cadet_npc, 162, 156, 2, blocker_text)
 
 # mother_home = NPC(SpritePack(mother),96,96,["Hey, Jake",
 #                                            "Are you excited?",

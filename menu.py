@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame, sys, shelve
 from pygame.locals import *
 from room_data import *
 from images import *
@@ -8,14 +8,19 @@ class Menu:
         self.surface = surface
         self.menu = emblem
         self.play_button = play_button
+        self.load_button = load_button
         self.logo = logo
         self.fade_white = pygame.image.load("surfaces/fade_white.png").convert()
+        self.decision = 0
+        self.slots = 3
+        self.files = ["saves/slot1","saves/slot2","saves/slot3"]
 
     def run(self, fpsClock):
         self.surface.fill((0,0,0))
         self.surface.blit(self.menu, (2, 16))
         self.surface.blit(self.logo, (0,0))
-        self.surface.blit(self.play_button, (20,230))
+        self.surface.blit(self.play_button, (30,230))
+        self.surface.blit(self.load_button, (170,230))
         (mouse_x, mouse_y) = pygame.mouse.get_pos()
         pygame.display.update()
         for event in pygame.event.get():
@@ -24,9 +29,11 @@ class Menu:
                 sys.exit()
 
         if pygame.mouse.get_pressed()[0]:
-            if mouse_x > 20 and mouse_x < 120 and mouse_y > 230 and mouse_y < 280:
+            if self.play_button.get_rect(topleft = (30,230)).collidepoint(mouse_x, mouse_y):
                 self.fade_to_white(fpsClock)
                 return "Moving"
+            elif self.load_button.get_rect(topleft = (170,230)).collidepoint(mouse_x,mouse_y):
+                return "Loading"
             else:
                 return "Menu"
         else:
@@ -38,6 +45,32 @@ class Menu:
         # return room, x, and y
         return (sally_port, 160, 160)
 
+    def run_load(self, fpsClock, slots):
+        self.surface.fill((0, 0, 0))
+        for slot in range(0,self.slots):
+            self.surface.blit(load_tile, (20, 20+90*slot))
+            if slots[slot] == 0:
+                self.surface.blit(empty_tile, (50, 30+90*slot))
+        self.surface.blit(load_select, (19, 19+90*self.decision))
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == KEYDOWN and event.key == K_UP:
+                self.decision -= 1
+            if event.type == KEYDOWN and event.key == K_DOWN:
+                self.decision += 1
+            self.decision %= 3
+            if event.type == KEYDOWN and event.key == K_f:
+                return "Moving"
+
+        if pygame.mouse.get_pressed()[0]:
+            return "Loading"
+
+        else:
+            return "Loading"
+
     def fade_to_white(self, fpsClock):
         counter = 0
 
@@ -48,6 +81,24 @@ class Menu:
             pygame.display.update()
             counter += 1
 
+    def load_slot(self):
+        save = shelve.open(self.files[self.decision])
+        if save["file"] == "no_save":
+            print "defaults"
+            story.decisions = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+            story.current_room = 7
+            story.current_save = self.decision
+            save.close()
+            return (sally_port, 120, 86)
 
+        else:
+            restore_steps = save["restore"]
+            for step in restore_steps:
+                print step
+            story.decisions = save["decisions"]
+            story.current_save = self.decision
+            ret = (ROOMS[save["room"]], save["cdt-x"], save["cdt-y"])
+            save.close()
+            return ret
 
 

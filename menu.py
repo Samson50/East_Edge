@@ -7,8 +7,6 @@ class Menu:
     def __init__(self, surface):
         self.surface = surface
         self.menu = emblem
-        self.play_button = play_button
-        self.load_button = load_button
         self.logo = logo
         self.fade_white = pygame.image.load("surfaces/fade_white.png").convert()
         self.decision = 0
@@ -19,20 +17,32 @@ class Menu:
         self.surface.fill((0,0,0))
         self.surface.blit(self.menu, (2, 16))
         self.surface.blit(self.logo, (0,0))
-        self.surface.blit(self.play_button, (30,230))
-        self.surface.blit(self.load_button, (170,230))
+        self.surface.blit(menu_select, (25+self.decision*140,225))
+        self.decision %= 2
+        self.surface.blit(menu_play, (30,230))
+        self.surface.blit(menu_load, (170,230))
         (mouse_x, mouse_y) = pygame.mouse.get_pos()
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
+            if event.type == KEYDOWN and event.key == K_RIGHT:
+                self.decision += 1
+            if event.type == KEYDOWN and event.key == K_LEFT:
+                self.decision -= 1
+            if event.type == KEYDOWN and event.key == K_f:
+                if self.decision == 0:
+                    self.fade_to_white(fpsClock)
+                    return "Moving"
+                if self.decision == 1:
+                    return "Loading"
 
         if pygame.mouse.get_pressed()[0]:
-            if self.play_button.get_rect(topleft = (30,230)).collidepoint(mouse_x, mouse_y):
+            if menu_play.get_rect(topleft = (30,230)).collidepoint(mouse_x, mouse_y):
                 self.fade_to_white(fpsClock)
                 return "Moving"
-            elif self.load_button.get_rect(topleft = (170,230)).collidepoint(mouse_x,mouse_y):
+            elif menu_load.get_rect(topleft = (170,230)).collidepoint(mouse_x,mouse_y):
                 return "Loading"
             else:
                 return "Menu"
@@ -50,13 +60,15 @@ class Menu:
         for slot in range(0,self.slots):
             self.surface.blit(load_tile, (20, 20+90*slot))
             if slots[slot] == 0:
-                self.surface.blit(empty_tile, (50, 30+90*slot))
+                self.surface.blit(empty_tile, (20, 20+90*slot))
         self.surface.blit(load_select, (19, 19+90*self.decision))
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
+            if event.type == KEYDOWN and event.key == K_d:
+                return "Menu"
             if event.type == KEYDOWN and event.key == K_UP:
                 self.decision -= 1
             if event.type == KEYDOWN and event.key == K_DOWN:
@@ -92,8 +104,8 @@ class Menu:
             return (sally_port, 120, 86)
 
         else:
-            restore_steps = save["restore"]
-            for step in restore_steps:
+            story.restore_steps = save["restore"]
+            for step in story.restore_steps:
                 change = step.split(":")
                 if change[0] == "N":
                     print "got it"

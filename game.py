@@ -144,7 +144,8 @@ class Controller(object):
                 fpsClock.tick(FPS)
 
             ###
-            self.combat.set_up(self.room.non_player_characters[story.opponent], self.cadet)
+            if self.mode == "Fighting":
+                self.combat.set_up(self.room.non_player_characters[story.opponent], self.cadet)
             while self.mode == "Fighting":
                 self.combat.get_events(self.surface)
                 self.mode = self.combat.show(self.surface, self.cadet)

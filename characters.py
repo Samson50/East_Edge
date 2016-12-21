@@ -207,10 +207,24 @@ text_000 = ["Jake! There are some serious regs",
             "",
             ##
             "So, how will you handle it?",
-            "DCX CTX 001",
+            "DCX FLO",
             "",
             "",
             ##
+            ""]
+text_010 = ["Okay, man. That's your decision.",
+            "You made it, now you have to",
+            "stick to it. A good leader is true",
+            "to themselves and isn't afraid",
+            ##
+            "to make unpopular decisions. The",
+            "worst thing you can do is be",
+            "fake. People can smell a fake",
+            "leader from miles away.",
+            ##
+            "CTS 001",
+            "",
+            "",
             ""]
 
 blocker_text = TextBlock(["Sorry, bro.",
@@ -229,7 +243,12 @@ blocker_002 = NPC(cadet_npc, 162, 156, 2, blocker_text)
 text_D = ["What?", "What do you still want?", "", ""]
 empty_res = TextBlock(text_D, [], -1, [])
 
-cadet_000 = NPC(cadet_npc, 258, 96, 1, TextBlock(text_000, choice_0, 0, [empty_res, empty_res, empty_res, empty_res]))
+cadet_000 = NPC(white_rh_npc, 258, 96, 1, TextBlock(text_000, choice_0, 0, [
+    TextBlock(text_010, choice_0, -2, [empty_res]),
+    TextBlock(text_010, choice_0, -2, [empty_res]),
+    TextBlock(text_010, choice_0, -2, [empty_res]),
+    TextBlock(text_010, choice_0, -2, [empty_res]),
+]))
 
 text_001 = ["Hey, word spreads fast here. I",
             "heard what you said to Steve. You",
@@ -244,7 +263,7 @@ text_001 = ["Hey, word spreads fast here. I",
 text_002 = ["Hey, things get around pretty",
             "quick here and I heard what you",
             "said to Steve outside. I get it.",
-            "You want do do the /'right thing/'",
+            "You want do do the \' right thing\'",
             ###
             "You're still full of Kewl-Aid from",
             "Beast. I know how you feel, wanting",
@@ -258,8 +277,35 @@ text_002 = ["Hey, things get around pretty",
             ###
             ""]
 
-text_003 = ["Third", "", "", ""]
+text_003 = ["Hey, I heard you told Steve outside",
+            "that you were going to give everyone",
+            "boards... Obviously you were kidding.",
+            "Nobody is that crazy, right?",
+            ##
+            "Nobody is that crazy, right?",
+            "DCX FLO",
+            "",
+            "",
+            ##
+            ""]
+
+text_301 = ["Dude... what the fuck...",
+            "",
+            "",
+            "",
+            ##
+            "ATK 001",
+            "",
+            "",
+            ""]
+
+text_302 = ["",
+            "",
+            "",
+            ""]
+
 text_004 = ["Fourth", "", "", ""]
+
 text_005 = ["*Sigh* Well... I'm not about to",
             "just let someone like you walk into",
             " my company area with an attitude",
@@ -286,7 +332,7 @@ text_007 = ["Morale response.",
             "",
             "",
             ##
-            "CTS",
+            "CTS 002",
             "",
             "",
             ""]
@@ -294,13 +340,24 @@ text_007 = ["Morale response.",
 text_008 = ["Leading response.",
             "",
             "",
-            ""]
-text_009 = ["Fighting response.",
+            "",
+            ##
+            "CTS 002",
             "",
             "",
             ""]
 
-cadet_001 = Combatant(cadet_npc, 34, 64, 1, TextBlock(text_001, choice_0, 0, [
+text_009 = ["Fighting response.",
+            "",
+            "",
+            "",
+            ##
+            "CTS 003",
+            "",
+            "",
+            ""]
+
+cadet_001 = Combatant(black_npc, 34, 64, 1, TextBlock(text_001, choice_0, 0, [
     TextBlock(text_001, [], 1, [empty_res]),
     TextBlock(text_002, choice_1, 1, [
         TextBlock(text_005, [], 2, [
@@ -310,5 +367,9 @@ cadet_001 = Combatant(cadet_npc, 34, 64, 1, TextBlock(text_001, choice_0, 0, [
         ]),
         TextBlock(text_006, [], 2, [empty_res])
     ]),
-    TextBlock(text_003, [], 1, [empty_res]),
-    TextBlock(text_004, [], 1, [empty_res])]))
+    TextBlock(text_003, [
+        TextBlock(text_301, [], 1, [empty_res]),
+        TextBlock(text_302, [], 1, [empty_res])
+    ], 1, [empty_res]),
+    TextBlock(text_004, [], 1, [empty_res])
+]))

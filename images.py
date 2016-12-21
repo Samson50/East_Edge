@@ -78,6 +78,18 @@ cadet_npc = SpritePack_NPC([["sprites/character_packs/cadet_other/"],['b-s.png',
                                                       'r-s.png','r-l.png','r-r.png'],  # right= 3
                                                      ['b.png','f.png','l.png','r.png']])
 
+black_npc = SpritePack_NPC([["sprites/character_packs/bald/black/"],['b-s.png','b-l.png','b-r.png',   # back = 0
+                                                      'f-s.png','f-l.png','f-r.png',    # front= 1
+                                                      'l-s.png','l-l.png','l-r.png',    # left = 2
+                                                      'r-s.png','r-l.png','r-r.png'],  # right= 3
+                                                     ['b.png','f.png','l.png','r.png']])
+
+white_rh_npc = SpritePack_NPC([["sprites/character_packs/cadet-male-redhead/"],['b-s.png','b-l.png','b-r.png',   # back = 0
+                                                      'f-s.png','f-l.png','f-r.png',    # front= 1
+                                                      'l-s.png','l-l.png','l-r.png',    # left = 2
+                                                      'r-s.png','r-l.png','r-r.png'],  # right= 3
+                                                     ['b.png','f.png','l.png','r.png']])
+
 female_white_ginger = SpritePack_NPC([["sprites/character_packs/ladies/red/hair-down/"],['b-s.png','b-l.png','b-r.png',   # back = 0
                                                                           'f-s.png','f-l.png','f-r.png',    # front= 1
                                                                           'l-s.png','l-l.png','l-r.png',    # left = 2
@@ -128,16 +140,18 @@ mini_shelf = pygame.image.load("surfaces/combat/mini_game/shelf.png")
 mini_background = pygame.image.load("surfaces/combat/mini_game/background.png")
 mini_goal = pygame.image.load("surfaces/combat/mini_game/goal.png")
 mini_frame = pygame.image.load("surfaces/combat/mini_game/frame.png")
+mini_plat = pygame.image.load("surfaces/combat/mini_game/platform.png")
 
 ## Menu ##
 
 emblem = pygame.image.load("sprites/decal/emblem.png")
-play_button = pygame.image.load("sprites/decal/play_button.png")
-load_button = pygame.image.load("sprites/decal/load_button.png")
+menu_play = pygame.image.load("sprites/decal/menu_play.png")
+menu_load = pygame.image.load("sprites/decal/menu_load.png")
+menu_select = pygame.image.load("sprites/decal/menu_select.png")
 logo = pygame.image.load("sprites/decal/game_menu.png")
 load_tile = pygame.image.load("sprites/decal/load_tile.png")
 load_select = pygame.image.load("sprites/decal/load_select.png")
-empty_tile = pygame.image.load("sprites/decal/empty_tile.png")
+empty_tile = pygame.image.load("sprites/decal/load_empty.png")
 
 ## Special ##
 

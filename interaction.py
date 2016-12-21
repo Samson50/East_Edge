@@ -79,14 +79,13 @@ class TextBox:
                     story.decisions[text_block.result] = self.decision_marker
                     story.current_scene = int(self.message[i].split(" ")[2])
                     self.message_marker = 0
-                    self.message = ["","","",""]
+                    self.message = ["", "", "", ""]
                     return "Cut_Scene"
                 elif ("FLO" in self.message[i]):
                     story.decisions[text_block.result] = self.decision_marker
                     self.message_marker = 0
-                    self.message = ["","","",""]
+                    self.message = ["", "", "", ""]
                     return "Talking"
-
                 else:
                     story.decisions[text_block.result] = self.decision_marker
                     self.message_marker = 0

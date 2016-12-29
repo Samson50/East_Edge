@@ -8,7 +8,7 @@ class Menu:
         self.surface = surface
         self.menu = emblem
         self.logo = logo
-        self.fade_white = pygame.image.load("surfaces/fade_white.png").convert()
+        self.fade_white = fade_white.convert()
         self.decision = 0
         self.slots = 3
         self.files = ["saves/slot1","saves/slot2","saves/slot3"]

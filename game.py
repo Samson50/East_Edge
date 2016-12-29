@@ -25,7 +25,7 @@ class Controller(object):
         self.pause = PauseMenu()
         self.width = 0
         self.fade_count = 0
-        self.fade = pygame.image.load("surfaces/fade.png").convert()
+        self.fade = fade.convert()
         self.cut_scene_counter = 0
         self.saves = self.load_saves()
 
@@ -155,7 +155,7 @@ class Controller(object):
 
     def intro(self):
         counter = 0
-        current_image = pygame.image.load("sumgai.png")
+        current_image = sumgai_logo
         cx = 100
         cy = 100
         while (counter < 135):
@@ -213,7 +213,7 @@ class Controller(object):
 
 pygame.init()
 
-pygame.display.set_icon(pygame.image.load("sprites/decal/icon.png"))
+pygame.display.set_icon(icon)
 pygame.display.set_caption("East Edge")
 #pygame.mixer.music.load("8-bit-Detective/detective.wav")
 #pygame.mixer.music.play(-1,0.0)

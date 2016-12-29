@@ -3,7 +3,7 @@ from pygame.locals import *
 
 class Item:
     def __init__(self, icon):
-        self.icon = pygame.image.load(icon)
+        self.icon = icon
 
     def show(self, surface, x, y):
         surface.blit(self.icon, (x,y))

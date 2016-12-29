@@ -304,7 +304,7 @@ class CombatBox:
         self.mini_game = MiniGame()
         self.mini_map = 0
         self.opp_target = 0
-        self.fade = pygame.image.load("surfaces/fade.png").convert()
+        self.fade = fade.convert()
         self.fade_out = 0
 
     def set_up(self,opponent,cadet):

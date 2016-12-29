@@ -35,6 +35,9 @@ home_bed = pygame.image.load("sprites/objects/HOME_bed.png")
 home_tree = pygame.image.load("sprites/objects/HOME_tree.png")
 box = pygame.image.load("sprites/objects/box.png")
 
+## Items ##
+potion = pygame.image.load("sprites/items/potion.png")
+
 ## Objects-front ##
 
 cadet_bed_front = pygame.image.load("sprites/objects/CADET_bed_front.png")
@@ -108,6 +111,12 @@ img_text_box = pygame.image.load("sprites/decal/textBox.png")
 img_yes = pygame.image.load("sprites/decal/yes.png")
 img_no = pygame.image.load("sprites/decal/no.png")
 img_decision = pygame.image.load("sprites/decal/decision.png")
+choice_00 = pygame.image.load("sprites/decal/choices/0.png")
+choice_01 = pygame.image.load("sprites/decal/choices/1.png")
+choice_02 = pygame.image.load("sprites/decal/choices/2.png")
+choice_03 = pygame.image.load("sprites/decal/choices/3.png")
+choice_04 = pygame.image.load("sprites/decal/choices/4.png")
+choice_05 = pygame.image.load("sprites/decal/choices/5.png")
 
 ## Combat ##
 
@@ -149,6 +158,7 @@ menu_play = pygame.image.load("sprites/decal/menu_play.png")
 menu_load = pygame.image.load("sprites/decal/menu_load.png")
 menu_select = pygame.image.load("sprites/decal/menu_select.png")
 logo = pygame.image.load("sprites/decal/game_menu.png")
+sumgai_logo = pygame.image.load("sumgai.png")
 load_tile = pygame.image.load("sprites/decal/load_tile.png")
 load_select = pygame.image.load("sprites/decal/load_select.png")
 empty_tile = pygame.image.load("sprites/decal/load_empty.png")
@@ -158,6 +168,9 @@ empty_tile = pygame.image.load("sprites/decal/load_empty.png")
 exit_down = pygame.image.load("sprites/decal/exit_down.png")
 decal_m1 = pygame.image.load("sprites/decal/M1.png")
 decal_m2 = pygame.image.load("sprites/decal/M2.png")
-#"surfaces/fade.png"
+fade = pygame.image.load("surfaces/fade.png")
+status_bar = pygame.image.load("sprites/status/status_bar.png")
+fade_white = pygame.image.load("surfaces/fade_white.png")
+icon = pygame.image.load("sprites/decal/icon.png")
 #"surfaces/fade_white.png"
 

@@ -4,15 +4,15 @@ from images import *
 from interaction import *
 from item import *
 
-choice_0 = [pygame.image.load("sprites/decal/choices/0.png"), pygame.image.load("sprites/decal/choices/1.png"),
-            pygame.image.load("sprites/decal/choices/2.png"), pygame.image.load("sprites/decal/choices/3.png")]
-choice_1 = [pygame.image.load("sprites/decal/choices/4.png"), pygame.image.load("sprites/decal/choices/5.png")]
+choice_0 = [choice_00, choice_01,
+            choice_02, choice_03]
+choice_1 = [choice_04, choice_05]
 
 
 class Player:
     def __init__(self, spritePack, x, y):
         self.sprites = spritePack
-        self.status_bar = pygame.image.load("sprites/status/status_bar.png")
+        self.status_bar = status_bar
         self.health = 100
         self.max_health = 100
         self.morale = 100
@@ -23,7 +23,7 @@ class Player:
         self.y = y
         self.face = 0
         self.pace = 0
-        self.items = [Potion("sprites/items/potion.png")]
+        self.items = [Potion(potion)]
 
     def status(self, surface):
         surface.blit(self.status_bar, (0, 0))

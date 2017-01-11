@@ -116,6 +116,11 @@ class Menu:
                     ## Move bound
                     del ROOMS[int(change[1])].bounds[ROOMS[int(change[1])].bounds.index(int(change[2]))]
                     ROOMS[int(change[1])].bounds.append(int(change[3]))
+                if change[0] == "R":
+                    del ROOMS[int(change[1])].non_player_characters[int(change[2])]
+                    del ROOMS[int(change[1])].actionable[int(change[2])]
+                    if len(change) == 4:
+                        del ROOMS[int(change[1])].bounds[int(change[3])]
             story.decisions = save["decisions"]
             story.current_save = self.decision
             ret = (ROOMS[save["room"]], save["cdt-x"], save["cdt-y"])

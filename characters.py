@@ -4,9 +4,9 @@ from images import *
 from interaction import *
 from item import *
 
-choice_0 = [choice_00, choice_01,
-            choice_02, choice_03]
-choice_1 = [choice_04, choice_05]
+choice_0 = [choice_000, choice_001,
+            choice_002, choice_003]
+choice_1 = [choice_004, choice_005]
 
 
 class Player:

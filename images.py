@@ -111,12 +111,12 @@ img_text_box = pygame.image.load("sprites/decal/textBox.png")
 img_yes = pygame.image.load("sprites/decal/yes.png")
 img_no = pygame.image.load("sprites/decal/no.png")
 img_decision = pygame.image.load("sprites/decal/decision.png")
-choice_00 = pygame.image.load("sprites/decal/choices/0.png")
-choice_01 = pygame.image.load("sprites/decal/choices/1.png")
-choice_02 = pygame.image.load("sprites/decal/choices/2.png")
-choice_03 = pygame.image.load("sprites/decal/choices/3.png")
-choice_04 = pygame.image.load("sprites/decal/choices/4.png")
-choice_05 = pygame.image.load("sprites/decal/choices/5.png")
+choice_000 = pygame.image.load("sprites/decal/choices/0.png")
+choice_001 = pygame.image.load("sprites/decal/choices/1.png")
+choice_002 = pygame.image.load("sprites/decal/choices/2.png")
+choice_003 = pygame.image.load("sprites/decal/choices/3.png")
+choice_004 = pygame.image.load("sprites/decal/choices/4.png")
+choice_005 = pygame.image.load("sprites/decal/choices/5.png")
 
 ## Combat ##
 

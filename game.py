@@ -79,6 +79,17 @@ class Controller(object):
                         del self.room.bounds[self.room.bounds.index(int(change[1]))]
                         self.room.bounds.append(int(change[2]))
 
+                    ##== Remove NPC from Room ==##
+                    if action[0] ==  'R':
+                        change = action.split(":")
+                        # Delete actionable
+                        del self.room.actionable[int(change[1])]
+                        # Delete character
+                        del self.room.non_player_characters[int(change[1])]
+                        if len(change) == 3:
+                            del self.room.bounds[self.room.bounds.index(int(change[2]))]
+
+
                     ##== Move Player ==##
                     if action[0] == 'M':
                         d = action.split(":")[1]

@@ -21,6 +21,8 @@ class Room:
         self.next_dir = 0
         self.move_counter = 0
         self.last_dir = 0
+        self.tick = 0
+        self.keys = []
 
         ##== Externally Used Variables ==##
         self.text = []
@@ -92,39 +94,28 @@ class Room:
                 return self.action(cadet,text_box, fpsClock, FPS, surface)
 
             if event.type == KEYDOWN and event.key in [K_LEFT, K_DOWN, K_UP, K_RIGHT]:
-                if self.direction_pressed == 0:
-                    self.direction_pressed = event.key
-                elif event.key != self.direction_pressed:
-                    self.next_dir = event.key
+                self.keys.insert(0, event.key)
+
+            if event.type == KEYUP and event.key in [K_LEFT, K_DOWN, K_UP, K_RIGHT]:
+                try:
+                    self.keys.remove(event.key)
+                except:
+                    print "KEY ERROR"
 
         #TODO: Implement fps counter every 16 ticks
-        if self.direction == 0:
-            self.direction = self.direction_pressed
-            self.move_counter = 16
+        self.tick += 1
+        self.tick %= 16
 
-        buttons = pygame.key.get_pressed()
+        if self.tick == 0:
+            if self.keys != []:
+                self.direction = self.keys[0]
+            else:
+                self.direction = 0
 
-        if not buttons[self.direction_pressed]:
-            self.direction_pressed = self.last_dir
-            self.last_dir = 0
-        elif buttons[self.next_dir]:
-            self.last_dir = self.direction_pressed
-            self.direction_pressed = self.next_dir
-            self.next_dir = 0
-
-        if self.move_counter == 0:
-            print cadet.x
-            print cadet.y
-            self.direction = self.direction_pressed
-            if self.direction != 0:
-                self.move_counter = 16
-
-        #if buttons[pygame.K_UP] or buttons[pygame.K_DOWN] or buttons[pygame.K_LEFT] or buttons[pygame.K_RIGHT]:
         if self.direction != 0:
-            self.move_counter -= 1
             self.move(cadet)
-        else: cadet.pace = 0
-
+        else:
+            cadet.pace = 0
 
         if ((cadet.x+139)/32+((cadet.y+139)/32)*self.width) in self.exits:
             return "Changing_Rooms"

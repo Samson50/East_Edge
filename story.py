@@ -1,5 +1,6 @@
 
 current_scene = 0
+directions = []
 opponent = 0
 decisions = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
 current_save = 0

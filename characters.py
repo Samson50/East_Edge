@@ -118,9 +118,10 @@ class NPC:
             self.stationary = True
 
     def interaction(self):
-        return self.text
+        return "Yeah, I have no idea what this is uspposed to do" #self.text
 
-    def talk_to(self, text_box, fpsClock, FPS, surface):
+    def talk_to(self, text_box, fpsClock, FPS, surface, cadet):
+        backdrop = pygame.transform.smoothscale(surface, (300,300))
         if (story.decisions[self.text_block.result] != -1):
             print self.text_block.result
             print self.text_block.next_text[0].text
@@ -135,8 +136,8 @@ class NPC:
                 text_box.message = [self.text_block.text[0], self.text_block.text[1], self.text_block.text[2],
                                     self.text_block.text[3]]
                 text_box.message_marker = 4
-            mode = text_box.getEvents(self.text_block)
-            text_box.draw_text(surface, self.text_block)
+            mode = text_box.getEvents(self.text_block, cadet)
+            text_box.draw_text(surface, self.text_block, backdrop)
             fpsClock.tick(FPS)
         return mode
 

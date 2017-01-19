@@ -4,50 +4,45 @@ from room_data import *
 from images import *
 
 class Menu:
-    def __init__(self, surface):
+    def __init__(self, surface, fpsClock):
+        self.mode = "Menu"
+        self.room_manager = Room_Manager(ROOMS, fpsClock, surface)
         self.surface = surface
         self.menu = emblem
         self.logo = logo
         self.fade_white = fade_white.convert()
         self.decision = 0
         self.slots = 3
+        self.saves = self.load_saves()
         self.files = ["saves/slot1","saves/slot2","saves/slot3"]
 
-    def run(self, fpsClock):
-        self.surface.fill((0,0,0))
-        self.surface.blit(self.menu, (2, 16))
-        self.surface.blit(self.logo, (0,0))
-        self.surface.blit(menu_select, (25+self.decision*140,225))
-        self.decision %= 2
-        self.surface.blit(menu_play, (30,230))
-        self.surface.blit(menu_load, (170,230))
-        (mouse_x, mouse_y) = pygame.mouse.get_pos()
-        pygame.display.update()
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == KEYDOWN and event.key == K_RIGHT:
-                self.decision += 1
-            if event.type == KEYDOWN and event.key == K_LEFT:
-                self.decision -= 1
-            if event.type == KEYDOWN and event.key == K_f:
-                if self.decision == 0:
-                    self.fade_to_white(fpsClock)
-                    return "Moving"
-                if self.decision == 1:
-                    return "Loading"
+    def run(self, fpsClock, cadet):
+        while self.mode == "Menu":
+            self.surface.fill((0,0,0))
+            self.surface.blit(self.menu, (2, 16))
+            self.surface.blit(self.logo, (0,0))
+            self.surface.blit(menu_select, (25+self.decision*140,225))
+            self.decision %= 2
+            self.surface.blit(menu_play, (30,230))
+            self.surface.blit(menu_load, (170,230))
+            (mouse_x, mouse_y) = pygame.mouse.get_pos()
+            pygame.display.update()
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == KEYDOWN and event.key == K_RIGHT:
+                    self.decision += 1
+                if event.type == KEYDOWN and event.key == K_LEFT:
+                    self.decision -= 1
+                if event.type == KEYDOWN and event.key == K_f:
+                    if self.decision == 0:
+                        self.fade_to_white(fpsClock)
+                        self.mode = self.play_game(fpsClock, cadet)
+                    if self.decision == 1:
+                        self.mode = self.load_game(fpsClock, cadet)
 
-        if pygame.mouse.get_pressed()[0]:
-            if menu_play.get_rect(topleft = (30,230)).collidepoint(mouse_x, mouse_y):
-                self.fade_to_white(fpsClock)
-                return "Moving"
-            elif menu_load.get_rect(topleft = (170,230)).collidepoint(mouse_x,mouse_y):
-                return "Loading"
-            else:
-                return "Menu"
-        else:
-            return "Menu"
+        return self.mode
 
     def start_game(self):
         #self.room = home_main
@@ -55,11 +50,30 @@ class Menu:
         # return room, x, and y
         return (sally_port, 160, 160)
 
-    def run_load(self, fpsClock, slots):
+    def play_game(self, fpsClock, cadet):
+        self.mode = "Moving"
+        while self.mode == "Moving":
+            self.mode = self.room_manager.getEvents(cadet, fpsClock, 70, self.surface)
+            self.room_manager.display(self.surface, cadet)
+            self.mode = self.room_manager.npc_action(self.mode,fpsClock,cadet,self.surface)
+            fpsClock.tick(70)
+
+    def load_game(self, fpsClock, cadet):
+        self.mode = "Loading"
+        while self.mode == "Loading":
+            self.mode = self.run_load(fpsClock)
+            fpsClock.tick(70)
+
+        if self.mode == "Moving":
+            (self.room_manager.room, cadet.x, cadet.y) = self.load_slot()
+            return self.play_game(fpsClock, cadet)
+
+
+    def run_load(self, fpsClock):
         self.surface.fill((0, 0, 0))
         for slot in range(0,self.slots):
             self.surface.blit(load_tile, (20, 20+90*slot))
-            if slots[slot] == 0:
+            if self.saves[slot] == 0:
                 self.surface.blit(empty_tile, (20, 20+90*slot))
         self.surface.blit(load_select, (19, 19+90*self.decision))
         pygame.display.update()
@@ -68,20 +82,16 @@ class Menu:
                 pygame.quit()
                 sys.exit()
             if event.type == KEYDOWN and event.key == K_d:
-                return "Menu"
+                self.mode = "Menu"
             if event.type == KEYDOWN and event.key == K_UP:
                 self.decision -= 1
             if event.type == KEYDOWN and event.key == K_DOWN:
                 self.decision += 1
             self.decision %= 3
             if event.type == KEYDOWN and event.key == K_f:
-                return "Moving"
+                self.mode = "Moving"
 
-        if pygame.mouse.get_pressed()[0]:
-            return "Loading"
-
-        else:
-            return "Loading"
+        return self.mode
 
     def fade_to_white(self, fpsClock):
         counter = 0
@@ -123,8 +133,28 @@ class Menu:
                         del ROOMS[int(change[1])].bounds[int(change[3])]
             story.decisions = save["decisions"]
             story.current_save = self.decision
+            story.current_room = save["room"]
             ret = (ROOMS[save["room"]], save["cdt-x"], save["cdt-y"])
             save.close()
             return ret
+    def load_saves(self):
+        slot1 = shelve.open("saves/slot1")
+        slot2 = shelve.open("saves/slot2")
+        slot3 = shelve.open("saves/slot3")
+        slots = [slot1, slot2, slot3]
+        loads = [0, 0, 0]
+
+        for slot in [0,1,2]:
+            try:
+                if slots[slot]["file"] == "no_save":
+                    loads[slot] = 0
+                else:
+                    loads[slot] = 1
+                slots[slot].close()
+            except KeyError:
+                slots[slot]["file"] = "no_save"
+                slots[slot].close()
+                loads[slot] = 0
+        return loads
 
 

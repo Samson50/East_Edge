@@ -2,6 +2,7 @@ import pygame, sys
 import characters
 import story
 import random
+import room_data
 from pygame.locals import *
 from images import *
 from mini_game import *
@@ -17,7 +18,9 @@ cut_scenes = [m_o,s_00,s_01]
 
 
 class TextBox:
-    def __init__(self):
+    def __init__(self, surface):
+        self.surface = surface
+        self.combat = CombatBox(surface)
         self.text = []
         self.message = ["", "", "", ""]
         self.font = pygame.font.Font(None, 20)
@@ -28,7 +31,7 @@ class TextBox:
         self.no = img_no
         self.decision = img_decision
 
-    def getEvents(self, text_block):
+    def getEvents(self, text_block, cadet):
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -36,7 +39,7 @@ class TextBox:
 
             if event.type == KEYDOWN:
                 if event.key == K_f:
-                    return self.update_message(text_block)
+                    return self.update_message(text_block, cadet)
                 if event.key == K_RIGHT:
                     self.decision_marker += 1
                 if event.key == K_LEFT:
@@ -49,7 +52,8 @@ class TextBox:
             self.decision_marker %= (max(len(text_block.choices),1))
         return "Talking"
 
-    def draw_text(self, surface, text_block):
+    def draw_text(self, surface, text_block, backdrop):
+        surface.blit(backdrop, (0,0))
         surface.blit(self.text_box, (10, 200))
         delta = 0
         if (not "DCX" in self.message[1]):
@@ -72,7 +76,7 @@ class TextBox:
 
         pygame.display.update()
 
-    def update_message(self, text_block):
+    def update_message(self, text_block, cadet):
         for i in range(0,4):
             if ("DCX" in self.message[i]):
                 if ("CTX" in self.message[i]):
@@ -107,16 +111,22 @@ class TextBox:
 
                     elif ("ATK" in text_block.text[self.message_marker]):
                         story.decisions[text_block.result] = 0
-                        print story.decisions
                         story.opponent = int(text_block.text[self.message_marker].split(" ")[1])
                         self.message_marker = 0
                         self.message = ["","","",""]
+                        self.fight(cadet)
 
-                        return "Fighting"
                     else:
                         self.message[i] = text_block.text[self.message_marker]
                         self.message_marker += 1
         return "Talking"
+    #TODO: FIX THIS SHIT
+    def fight(self, cadet):
+        self.combat.set_up(room_data.ROOMS[story.current_room].non_player_characters[story.opponent], cadet)
+        self.mode = "Fighting"
+        while self.mode == "Fighting":
+            self.combat.get_events(self.surface)
+            self.mode = self.combat.show(self.surface, cadet)
 
 
 class Choice:
@@ -280,7 +290,8 @@ class Help(Choice):
 
 
 class CombatBox:
-    def __init__(self):
+    def __init__(self, surface):
+        self.surface = surface
         self.background = combat_surface
         self.pointer = combat_decision
         self.decision = 0
@@ -486,8 +497,6 @@ class CombatBox:
                     surface.blit(text_object, text_rect)
 
             elif self.response[0] == 1:
-                print self.response[2][1]
-                print self.response[2][0]
                 if self.response[2][1] == 0:
                     self.opponent.health -= self.response[2][0]
                 else:
@@ -548,7 +557,6 @@ class CombatBox:
                 surface.blit(self.fade, (0,0))
 
             else:
-                print story.decisions
                 return "Post-Fight"
 
         pygame.display.update()

@@ -2,8 +2,11 @@ import pygame, sys
 from pygame.locals import *
 from characters import *
 from images import *
+from pause import *
+
 
 #   when entering room [-44,-256,6,12]
+
 class Room:
     def __init__(self,background,back_obj,fore_obj,bounds,exits,entrance,adjacent,non_player_characters,actionable,width):
         self.background = background
@@ -16,82 +19,88 @@ class Room:
         self.non_player_characters = non_player_characters
         self.actionable = actionable
         self.width = width
+
+class Room_Manager:
+    def __init__(self, room_list, fpsClock, surface):
+        self.text_box = TextBox(surface)
+        self.pause_menu = PauseMenu()
+        self.fpsClock = fpsClock
+        self.room_list = room_list
+        self.room = room_list[0]
         self.direction = 0
-        self.direction_pressed = 0
-        self.next_dir = 0
         self.move_counter = 0
-        self.last_dir = 0
         self.tick = 0
         self.keys = []
+        self.fade = fade.convert()
 
         ##== Externally Used Variables ==##
         self.text = []
 
-    def change_rooms(self,x,y,ROOMS):
-        self.move_counter = 0
-        index = self.exits.index(((x+139)/32)+self.width*((y+139)/32))
-        story.current_room = self.adjacent[index]
-        new_room = ROOMS[story.current_room]
-        positions = self.entrance[index]
-        return  (new_room,positions[0],positions[1])
+    def change_rooms(self, cadet, ROOMS, surface):
+        fade_count = 0
+        while fade_count < 510:
+            fade_count += 5
+            if fade_count < 255:
+                self.fade.set_alpha(fade_count)
+            elif (fade_count == 255):
+                self.move_counter = 0
+                index = self.room.exits.index(((cadet.x + 139) / 32) + self.room.width * ((cadet.y + 139) / 32))
+                story.current_room = self.room.adjacent[index]
+                (cadet.x, cadet.y, burn) = self.room.entrance[index]
+                self.room = self.room_list[story.current_room]
+
+            elif (fade_count > 255 and fade_count < 510):
+                self.fade.set_alpha(510 - fade_count)
+
+            #surface =
+            self.cheap_display(surface, cadet)
+            surface.blit(self.fade, (0, 0))
+
+            pygame.display.update()
+            self.fpsClock.tick(70)
+
 
     def display(self, surface, cadet):
-
         surface.fill((0,0,0))
-
-        surface.blit(self.background, (-cadet.x, -cadet.y+10))
-
-        for img in self.back_obj:
+        surface.blit(self.room.background, (-cadet.x, -cadet.y+10))
+        for img in self.room.back_obj:
             surface.blit(img[0], (img[1]-cadet.x, img[2]-cadet.y))
-
-        for cdt in self.non_player_characters:
+        for cdt in self.room.non_player_characters:
             surface.blit(cdt.show_base(),(cdt.x-cadet.x, cdt.y-cadet.y))
-
         cadet.show(surface)
-
-        for cdt in self.non_player_characters:
+        for cdt in self.room.non_player_characters:
             surface.blit(cdt.show_top(), (cdt.x-cadet.x, cdt.y-cadet.y))
-
-        for img in self.fore_obj:
+        for img in self.room.fore_obj:
             surface.blit(img[0], (img[1]-cadet.x, img[2]-cadet.y))
-
         cadet.status(surface)
-
         pygame.display.update()
 
     def cheap_display(self, surface, cadet):
-        surface.blit(self.background, (-cadet.x, -cadet.y + 10))
-
-        for img in self.back_obj:
+        surface.blit(self.room.background, (-cadet.x, -cadet.y + 10))
+        for img in self.room.back_obj:
             surface.blit(img[0], (img[1] - cadet.x, img[2] - cadet.y))
-
-        for cdt in self.non_player_characters:
+        for cdt in self.room.non_player_characters:
             surface.blit(cdt.show_base(), (cdt.x - cadet.x, cdt.y - cadet.y))
-
         cadet.show(surface)
-
-        for cdt in self.non_player_characters:
+        for cdt in self.room.non_player_characters:
             surface.blit(cdt.show_top(), (cdt.x-cadet.x, cdt.y-cadet.y))
-
-        for img in self.fore_obj:
+        for img in self.room.fore_obj:
             surface.blit(img[0], (img[1] - cadet.x, img[2] - cadet.y))
-
         cadet.status(surface)
-
         return surface
 
 
-    def getEvents(self, cadet, text_box, pause_menu, fpsClock, FPS, surface):
+    def getEvents(self, cadet, fpsClock, FPS, surface):
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
 
             if event.type == KEYDOWN and event.key == K_ESCAPE:
-                return pause_menu.run(surface, cadet)
+                return self.pause_menu.run(surface, cadet)
 
             if event.type == KEYDOWN and event.key == K_f:
-                return self.action(cadet,text_box, fpsClock, FPS, surface)
+                return self.action(cadet, fpsClock, FPS, surface)
 
             if event.type == KEYDOWN and event.key in [K_LEFT, K_DOWN, K_UP, K_RIGHT]:
                 self.keys.insert(0, event.key)
@@ -102,99 +111,197 @@ class Room:
                 except:
                     print "KEY ERROR"
 
-        #TODO: Implement fps counter every 16 ticks
         self.tick += 1
-        self.tick %= 16
+        self.tick %= 8
 
-        if self.tick == 0:
+        if self.tick == 0 and self.move_counter == 0:
             if self.keys != []:
-                self.direction = self.keys[0]
+                if self.move_counter == 0:
+                    self.move_counter = 16
+                    self.direction = self.keys[0]
             else:
                 self.direction = 0
 
-        if self.direction != 0:
+        if self.move_counter != 0:
+            self.move_counter -= 1
             self.move(cadet)
         else:
             cadet.pace = 0
 
-        if ((cadet.x+139)/32+((cadet.y+139)/32)*self.width) in self.exits:
-            return "Changing_Rooms"
-
-        return "Moving"
-
-    def pause(self, surface):
-        paused = True
-        pointer = 0
-        while paused:
-            for event in pygame.event.get():
-                if event.type == QUIT:
-                    pygame.quit()
-                    sys.exit()
-                if event.type == KEYDOWN:
-                    if event.key == K_UP:
-                        pointer -= 1
-                    if event.key == K_DOWN:
-                        pointer += 1
+        if ((cadet.x+139)/32+((cadet.y+139)/32)*self.room.width) in self.room.exits:
+            self.keys = []
+            self.direction = 0
+            self.tick = 0
+            self.move_counter = 0
+            self.change_rooms(cadet, self.room_list, surface)
 
         return "Moving"
 
     def move(self, cadet):
         cadet.pace += 1
         if (self.direction == pygame.K_UP):
-            cadet.move_up(self.width, self.bounds)
-
+            cadet.move_up(self.room.width, self.room.bounds)
         if (self.direction == pygame.K_DOWN):
-            cadet.move_down(self.width, self.bounds)
-
+            cadet.move_down(self.room.width, self.room.bounds)
         if (self.direction == pygame.K_LEFT):
-            cadet.move_left(self.width, self.bounds)
-
+            cadet.move_left(self.room.width, self.room.bounds)
         if (self.direction == pygame.K_RIGHT):
-            cadet.move_right(self.width, self.bounds)
+            cadet.move_right(self.room.width, self.room.bounds)
 
-    def action(self, cadet, text_box, fpsClock, FPS, surface):
+    def action(self, cadet, fpsClock, FPS, surface):
         X = (cadet.x + 149) / 32
         Y = (cadet.y + 145) / 32
         if cadet.face == 0:
-            if (X + (Y - 1) * self.width) in self.actionable:
-                i = self.actionable.index(X + (Y - 1) * self.width)
-                self.non_player_characters[i].look_at(cadet.face)
+            if (X + (Y - 1) * self.room.width) in self.room.actionable:
+                i = self.room.actionable.index(X + (Y - 1) * self.room.width)
+                self.room.non_player_characters[i].look_at(cadet.face)
                 surface = self.cheap_display(surface, cadet)
                 pygame.display.update()
-                return self.non_player_characters[i].talk_to(text_box, fpsClock, FPS, surface)
+                return self.room.non_player_characters[i].talk_to(self.text_box, fpsClock, FPS, surface, cadet)
             else: return "Moving"
 
         elif cadet.face == 1:
-            if (X + (Y + 1) * self.width) in self.actionable:
-                i = self.actionable.index(X + (Y + 1) * self.width)
-                self.non_player_characters[i].look_at(cadet.face)
+            if (X + (Y + 1) * self.room.width) in self.room.actionable:
+                i = self.room.actionable.index(X + (Y + 1) * self.room.width)
+                self.room.non_player_characters[i].look_at(cadet.face)
                 surface = self.cheap_display(surface, cadet)
                 pygame.display.update()
-                return self.non_player_characters[i].talk_to(text_box, fpsClock, FPS, surface)
+                return self.room.non_player_characters[i].talk_to(self.text_box, fpsClock, FPS, surface, cadet)
             else: return "Moving"
 
         elif cadet.face == 2:
-            if (X - 1 + Y * self.width) in self.actionable:
-                i = self.actionable.index(X - 1 + Y * self.width)
-                self.non_player_characters[i].look_at(cadet.face)
+            if (X - 1 + Y * self.room.width) in self.room.actionable:
+                i = self.room.actionable.index(X - 1 + Y * self.room.width)
+                self.room.non_player_characters[i].look_at(cadet.face)
                 surface = self.cheap_display(surface, cadet)
                 pygame.display.update()
-                return self.non_player_characters[i].talk_to(text_box, fpsClock, FPS, surface)
+                return self.room.non_player_characters[i].talk_to(self.text_box, fpsClock, FPS, surface, cadet)
             else: return "Moving"
 
         elif cadet.face == 3:
-            if (X + 1 + Y * self.width) in self.actionable:
-                i = self.actionable.index(X + 1 + Y * self.width)
-                self.non_player_characters[i].look_at(cadet.face)
+            if (X + 1 + Y * self.room.width) in self.room.actionable:
+                i = self.room.actionable.index(X + 1 + Y * self.room.width)
+                self.room.non_player_characters[i].look_at(cadet.face)
                 surface = self.cheap_display(surface, cadet)
                 pygame.display.update()
-                return self.non_player_characters[i].talk_to(text_box, fpsClock, FPS, surface)
+                return self.room.non_player_characters[i].talk_to(self.text_box, fpsClock, FPS, surface, cadet)
             else: return "Moving"
 
         else:
             return "Moving"
 
-hallway = Room(hallway,
+    def npc_action(self, mode, fpsClock, cadet, surface):
+        self.mode = mode
+        while self.mode != "Moving" and self.mode != "Loading":
+            if self.mode == "Cut_Scene":
+                self.cut_scene(fpsClock, 70, cadet, surface)
+            if self.mode == "Talking":
+                print "talking"
+        return self.mode
+
+
+
+    def cut_scene(self, fpsClock, FPS, cadet, surface):
+        print "cutting"
+        directions = cut_scenes[story.current_scene]
+        cut_scene_counter = 0
+        while self.mode == "Cut_Scene":
+            # step is the individual section of the scene
+            step = directions[0][cut_scene_counter]
+            # each action is an instruction to be performed during that section
+            for action in step.split(" "):
+
+                ##== Move NPC Action ==##
+                if action[0] == 'N':
+                    change = action.split(":")
+                    ## Move action
+                    self.room.actionable[self.room.actionable.index(int(change[1]))] = int(change[2])
+                    ## Move bound
+                    del self.room.bounds[self.room.bounds.index(int(change[1]))]
+                    self.room.bounds.append(int(change[2]))
+
+                ##== Remove NPC from Room ==##
+                if action[0] == 'R':
+                    change = action.split(":")
+                    # Delete actionable
+                    del self.room.actionable[int(change[1])]
+                    # Delete character
+                    del self.room.non_player_characters[int(change[1])]
+                    if len(change) == 3:
+                        del self.room.bounds[self.room.bounds.index(int(change[2]))]
+
+                ##== Move Player ==##
+                if action[0] == 'M':
+                    d = action.split(":")[1]
+                    if (d == "d"):
+                        cadet.move_down(self.room.width, self.room.bounds)
+                    elif (d == "u"):
+                        cadet.move_up(self.room.width, self.room.bounds)
+                    elif (d == "r"):
+                        cadet.move_right(self.room.width, self.room.bounds)
+                    elif (d == "l"):
+                        cadet.move_left(self.room.width, self.room.bounds)
+
+                ##== Move NPC ==##
+                if action[0] in ["0", "1", "2", "3", "4", "5"]:
+                    direction = action.split(":")
+                    if (direction[1] == 'r' or direction[1] == 'l' or direction[1] == 'u' or direction[1] == 'd'):
+                        self.room.non_player_characters[int(direction[0])].move(direction[1])
+                    if (direction[1] == 'f'):
+                        self.room.non_player_characters[int(direction[0])].look_at(int(direction[2]))
+
+                ##== Talk to NPC ==##
+                if action[0] == 'T':
+                    #TODO: Needs to be able to edit the current directions to effect cutscene follow on
+                    #TODO: Also needs to be the last direction
+                    direction = action.split(":")
+                    self.mode = self.room.non_player_characters[int(direction[1])].talk_to(self.text_box, fpsClock, FPS, surface, cadet)
+
+
+                ##== Change Rooms ==##
+                if (action[0] == 'C'):
+                    change = action.split(":")
+                    while (self.fade_count < 510):
+                        self.fade_count += 5
+                        if (self.fade_count < 255):
+                            self.fade.set_alpha(self.fade_count)
+                        elif (self.fade_count == 255):
+                            self.room = self.room_list[int(change[1])]
+                            cadet.x = int(change[2])
+                            cadet.y = int(change[3])
+                        elif (self.fade_count > 255 and self.fade_count < 510):
+                            self.fade.set_alpha(510 - self.fade_count)
+                        self.cheap_display(surface, cadet)
+                        surface.blit(self.fade, (0, 0))
+
+                        pygame.display.update()
+                        fpsClock.tick(FPS)
+
+                    self.fade_count = 0
+
+                ##== Do Things with Objects ==##
+                if (action[0] == 'O'):
+                    stuff = action.split(":")
+                    if action[1] == 'F':
+                        if action[2] == 'R':
+                            del self.room.fore_obj[(int(stuff[1]))]
+
+                            # if action[1] == 'B':
+
+            cut_scene_counter += 1
+            if cut_scene_counter >= len(directions[0]):  # make 32 class variable
+                story.restore_steps += directions[1]
+                self.mode = "Moving"
+
+            self.display(surface, cadet)
+            pygame.display.update()
+
+            fpsClock.tick(FPS)
+        return self.mode
+
+
+
+hallway0 = Room(hallway,
            [[door_barracks,0,198],
             [door_barracks,0,486],
             [door_stairwell,160,134]],
@@ -365,7 +472,7 @@ home_room = Room(home_player,
                  [],
                  12)
 
-home_main = Room(home_main,
+home_main0 = Room(home_main,
                  [[box,96,136]],
                  [[home_table_front,96,256],
                   [home_counter_front,32,160],
@@ -432,4 +539,4 @@ sally_port = Room(sally_port_img,
                   [62,130,148],
                   18)
 
-ROOMS = [Mac_401, hallway, barracks1, m2_stairwell, m1_stairwell, home_room, home_main, sally_port]
+ROOMS = [Mac_401, hallway0, barracks1, m2_stairwell, m1_stairwell, home_room, home_main0, sally_port]

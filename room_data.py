@@ -97,7 +97,7 @@ class Room_Manager:
                 sys.exit()
 
             if event.type == KEYDOWN and event.key == K_ESCAPE:
-                return self.pause_menu.run(surface, cadet)
+                return self.pause_menu.run(surface, cadet, pygame.transform.smoothscale(surface, (300,300)))
 
             if event.type == KEYDOWN and event.key == K_f:
                 return self.action(cadet, fpsClock, FPS, surface)
@@ -192,7 +192,7 @@ class Room_Manager:
 
     def npc_action(self, mode, fpsClock, cadet, surface):
         self.mode = mode
-        while self.mode != "Moving" and self.mode != "Loading":
+        while self.mode != "Moving" and self.mode != "Loading" and self.mode != "Quit":
             if self.mode == "Cut_Scene":
                 self.cut_scene(fpsClock, 70, cadet, surface)
             if self.mode == "Talking":

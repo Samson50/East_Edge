@@ -17,10 +17,62 @@ class Option():
 class Save(Option):
     def __init__(self, x):
         Option.__init__(self, pause_img, x)
+        self.decision = 0
 
-    def run(self, cadet):
+    def load_saves(self):
+        slot1 = shelve.open("saves/slot1")
+        slot2 = shelve.open("saves/slot2")
+        slot3 = shelve.open("saves/slot3")
+        slots = [slot1, slot2, slot3]
+        loads = [0, 0, 0]
+
+        for slot in [0,1,2]:
+            try:
+                if slots[slot]["file"] == "no_save":
+                    loads[slot] = 0
+                else:
+                    loads[slot] = 1
+                slots[slot].close()
+            except KeyError:
+                slots[slot]["file"] = "no_save"
+                slots[slot].close()
+                loads[slot] = 0
+        return loads
+
+    def run(self, cadet, surface):
+        saving = True
+        loads = self.load_saves()
+        while saving:
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == KEYDOWN:
+                    if event.key == K_f:
+                        self.save(cadet, self.decision)
+                        saving = False
+                    if event.key == K_UP:
+                        self.decision -= 1
+                        self.decision %= 3
+                    if event.key == K_DOWN:
+                        self.decision += 1
+                        self.decision %= 3
+                    if event.key == K_ESCAPE or event.key == K_d:
+                        saving = False
+
+            surface.blit(save_menu, (75, 75))
+            for slot in [0,1,2]:
+                surface.blit(save_slot, (85, 97+slot*42))
+                if loads[slot] == 0:
+                    surface.blit(save_empty, (90, 101+slot*42))
+            surface.blit(save_select, (81, 93+self.decision*42))
+
+            pygame.display.update()
+        return "Pause"
+
+    def save(self, cadet, decision):
         # save values
-        slot = shelve.open(story.saves[story.current_save])
+        slot = shelve.open(story.saves[decision])
         slot["file"] = "has-file"
         slot["restore"] = story.restore_steps
         slot["decisions"] = story.decisions
@@ -28,23 +80,24 @@ class Save(Option):
         slot["cdt-x"] = cadet.x
         slot["cdt-y"] = cadet.y
         slot.close()
-        return False
+        return "Pause"
 
 
 class Pack(Option):
     def __init__(self, x):
         Option.__init__(self, pack_img, x)
 
-    def run(self, cadet):
-        return True
+    def run(self, cadet, surface):
+        return "Pause"
 
 class Quit(Option):
     def __init__(self, x):
         Option.__init__(self, quit_img, x)
 
-    def run(self, cadet):
-        pygame.quit()
-        sys.exit()
+    def run(self, cadet, surface):
+        return "Quit"
+        #pygame.quit()
+        #sys.exit()
 
 
 class PauseMenu():
@@ -55,7 +108,7 @@ class PauseMenu():
         self.bottom = pause_bottom
         self.pointer = 0
 
-    def get_events(self, cadet):
+    def get_events(self, cadet, surface):
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -67,13 +120,14 @@ class PauseMenu():
                 if event.key == K_UP:
                     self.pointer -= 1
                 if event.key == K_ESCAPE:
-                    return False
+                    return "Moving"
                 if event.key == K_f:
-                    return self.options[self.pointer].run(cadet)
+                    return self.options[self.pointer].run(cadet, surface)
         self.pointer %= len(self.options)
-        return True
+        return "Pause"
 
-    def show(self, surface):
+    def show(self, surface, backdrop):
+        surface.blit(backdrop, (0,0))
         surface.blit(self.top, (250,0))
         i = 0
         for option in self.options:
@@ -85,14 +139,14 @@ class PauseMenu():
 
         pygame.display.update()
 
-    def run(self, surface, cadet):
-        print "stuffs"
-        paused = True
-        while paused:
-            paused = self.get_events(cadet)
-            self.show(surface)
+    def run(self, surface, cadet, backdrop):
+        mode = "Pause"
+        while mode == "Pause":
+            mode = self.get_events(cadet, surface)
+            self.show(surface, backdrop)
 
-        return "Moving"
+        print mode
+        return mode
 
 
 

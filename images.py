@@ -21,6 +21,10 @@ pause_top = pygame.image.load("surfaces/paused/pause_top.png")
 pause_mid = pygame.image.load("surfaces/paused/pause_mid.png")
 pause_bottom = pygame.image.load("surfaces/paused/pause_bottom.png")
 pause_select = pygame.image.load("surfaces/paused/pause_select.png")
+save_menu = pygame.image.load("surfaces/paused/save/save_menu.png")
+save_select = pygame.image.load("surfaces/paused/save/save_select.png")
+save_slot = pygame.image.load("surfaces/paused/save/save_slot.png")
+save_empty = pygame.image.load("surfaces/paused/save/save_empty.png")
 
 ## Objects ##
 

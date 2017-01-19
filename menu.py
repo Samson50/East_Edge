@@ -41,7 +41,7 @@ class Menu:
                         self.mode = self.play_game(fpsClock, cadet)
                     if self.decision == 1:
                         self.mode = self.load_game(fpsClock, cadet)
-
+                    if self.mode == "Quit": self.mode = "Menu"
         return self.mode
 
     def start_game(self):
@@ -57,6 +57,8 @@ class Menu:
             self.room_manager.display(self.surface, cadet)
             self.mode = self.room_manager.npc_action(self.mode,fpsClock,cadet,self.surface)
             fpsClock.tick(70)
+        print self.mode
+        return self.mode
 
     def load_game(self, fpsClock, cadet):
         self.mode = "Loading"

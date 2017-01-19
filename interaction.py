@@ -120,7 +120,6 @@ class TextBox:
                         self.message[i] = text_block.text[self.message_marker]
                         self.message_marker += 1
         return "Talking"
-    #TODO: FIX THIS SHIT
     def fight(self, cadet):
         self.combat.set_up(room_data.ROOMS[story.current_room].non_player_characters[story.opponent], cadet)
         self.mode = "Fighting"
@@ -325,7 +324,7 @@ class CombatBox:
         self.opponent.look_at(0)
         self.mode = "Fighting"
         self.cadet = cadet
-        self.items = cadet.items ## TODO add items to cadet class
+        self.items = cadet.items
 
     def analyze(self):
         first = [0,["You take a moment and try to","analyze the situation","",""]]

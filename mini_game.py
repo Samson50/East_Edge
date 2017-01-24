@@ -1,5 +1,4 @@
 import pygame, sys
-import characters
 import story
 from pygame.locals import *
 from images import *

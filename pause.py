@@ -1,8 +1,6 @@
 import pygame, sys, shelve, story
 from pygame.locals import *
-from characters import *
 from images import *
-from room_data import *
 
 
 class Option():
@@ -95,9 +93,9 @@ class Quit(Option):
         Option.__init__(self, quit_img, x)
 
     def run(self, cadet, surface):
-        return "Quit"
-        #pygame.quit()
-        #sys.exit()
+        #return "Quit"
+        pygame.quit()
+        sys.exit()
 
 
 class PauseMenu():

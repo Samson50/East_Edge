@@ -1,6 +1,6 @@
 import pygame, sys
 from pygame.locals import *
-from characters import *
+from character_data import *
 from images import *
 from pause import *
 
@@ -52,7 +52,6 @@ class Room_Manager:
             elif (fade_count > 255 and fade_count < 510):
                 self.fade.set_alpha(510 - fade_count)
 
-            #surface =
             self.cheap_display(surface, cadet)
             surface.blit(self.fade, (0, 0))
 

@@ -74,40 +74,46 @@ class SpritePack:
     def __getitem__(self, i):
         return self.sprites[i]
 
-player_pack = SpritePack([["sprites/character_packs/cadet_other/"],['b-s.png','b-l.png','b-r.png',   # back = 0
-                                                      'f-s.png','f-l.png','f-r.png',    # front= 1
-                                                      'l-s.png','l-l.png','l-r.png',    # left = 2
-                                                      'r-s.png','r-l.png','r-r.png']])
+player_pack = SpritePack([["sprites/character_packs/cadet_other/"],[
+    'b-s.png','b-l.png','b-r.png',   # back = 0
+    'f-s.png','f-l.png','f-r.png',    # front= 1
+    'l-s.png','l-l.png','l-r.png',    # left = 2
+    'r-s.png','r-l.png','r-r.png']])
 
-cadet_npc = SpritePack_NPC([["sprites/character_packs/cadet_other/"],['b-s.png','b-l.png','b-r.png',   # back = 0
-                                                      'f-s.png','f-l.png','f-r.png',    # front= 1
-                                                      'l-s.png','l-l.png','l-r.png',    # left = 2
-                                                      'r-s.png','r-l.png','r-r.png'],  # right= 3
-                                                     ['b.png','f.png','l.png','r.png']])
+cadet_npc = SpritePack_NPC([["sprites/character_packs/cadet_other/"],[
+    'b-s.png','b-l.png','b-r.png',   # back = 0
+    'f-s.png','f-l.png','f-r.png',    # front= 1
+    'l-s.png','l-l.png','l-r.png',    # left = 2
+    'r-s.png','r-l.png','r-r.png'],  # right= 3
+    ['b.png','f.png','l.png','r.png']])
 
-black_npc = SpritePack_NPC([["sprites/character_packs/bald/black/"],['b-s.png','b-l.png','b-r.png',   # back = 0
-                                                      'f-s.png','f-l.png','f-r.png',    # front= 1
-                                                      'l-s.png','l-l.png','l-r.png',    # left = 2
-                                                      'r-s.png','r-l.png','r-r.png'],  # right= 3
-                                                     ['b.png','f.png','l.png','r.png']])
+black_npc = SpritePack_NPC([["sprites/character_packs/bald/black/"],[
+    'b-s.png','b-l.png','b-r.png',   # back = 0
+    'f-s.png','f-l.png','f-r.png',    # front= 1
+    'l-s.png','l-l.png','l-r.png',    # left = 2
+    'r-s.png','r-l.png','r-r.png'],  # right= 3
+    ['b.png','f.png','l.png','r.png']])
 
-white_rh_npc = SpritePack_NPC([["sprites/character_packs/cadet-male-redhead/"],['b-s.png','b-l.png','b-r.png',   # back = 0
-                                                      'f-s.png','f-l.png','f-r.png',    # front= 1
-                                                      'l-s.png','l-l.png','l-r.png',    # left = 2
-                                                      'r-s.png','r-l.png','r-r.png'],  # right= 3
-                                                     ['b.png','f.png','l.png','r.png']])
+white_rh_npc = SpritePack_NPC([["sprites/character_packs/cadet-male-redhead/"],[
+    'b-s.png','b-l.png','b-r.png',   # back = 0
+    'f-s.png','f-l.png','f-r.png',    # front= 1
+    'l-s.png','l-l.png','l-r.png',    # left = 2
+    'r-s.png','r-l.png','r-r.png'],  # right= 3
+    ['b.png','f.png','l.png','r.png']])
 
-female_white_ginger = SpritePack_NPC([["sprites/character_packs/ladies/red/hair-down/"],['b-s.png','b-l.png','b-r.png',   # back = 0
-                                                                          'f-s.png','f-l.png','f-r.png',    # front= 1
-                                                                          'l-s.png','l-l.png','l-r.png',    # left = 2
-                                                                          'r-s.png','r-l.png','r-r.png'],  # right= 3
-                                                                        ['b.png','f.png','l.png','r.png']])
+female_white_ginger = SpritePack_NPC([["sprites/character_packs/ladies/red/hair-down/"],[
+    'b-s.png','b-l.png','b-r.png',   # back = 0
+    'f-s.png','f-l.png','f-r.png',    # front= 1
+    'l-s.png','l-l.png','l-r.png',    # left = 2
+    'r-s.png','r-l.png','r-r.png'],  # right= 3
+    ['b.png','f.png','l.png','r.png']])
 
-female_white_brown = SpritePack_NPC([["sprites/character_packs/ladies/brown/bun/"],['b-s.png','b-l.png','b-r.png',   # back = 0
-                                                                          'f-s.png','f-l.png','f-r.png',    # front= 1
-                                                                          'l-s.png','l-l.png','l-r.png',    # left = 2
-                                                                          'r-s.png','r-l.png','r-r.png'],  # right= 3
-                                                                        ['b.png','f.png','l.png','r.png']])
+female_white_brown = SpritePack_NPC([["sprites/character_packs/ladies/brown/bun/"],[
+    'b-s.png','b-l.png','b-r.png',   # back = 0
+    'f-s.png','f-l.png','f-r.png',    # front= 1
+    'l-s.png','l-l.png','l-r.png',    # left = 2
+    'r-s.png','r-l.png','r-r.png'],  # right= 3
+    ['b.png','f.png','l.png','r.png']])
 
 ## Interaction ##
 
@@ -143,8 +149,9 @@ overlay = pygame.image.load("surfaces/combat/status/cover.png")
 
 ## Mini-Game ##
 
-mini_sprite = SpritePack([["surfaces/combat/mini_game/mini_sprite/"],["r-0.png","r-1.png","r-2.png","r-3.png",
-                                             "l-0.png","l-1.png","l-2.png","l-3.png"]])
+mini_sprite = SpritePack([["surfaces/combat/mini_game/mini_sprite/"],[
+    "r-0.png","r-1.png","r-2.png","r-3.png",
+    "l-0.png","l-1.png","l-2.png","l-3.png"]])
 mini_tile = pygame.image.load("surfaces/combat/mini_game/grey_brick.png")
 mini_health = pygame.image.load("surfaces/combat/mini_game/health.png")
 mini_enemy = pygame.image.load("surfaces/combat/mini_game/enemy.png")
@@ -176,5 +183,7 @@ fade = pygame.image.load("surfaces/fade.png")
 status_bar = pygame.image.load("sprites/status/status_bar.png")
 fade_white = pygame.image.load("surfaces/fade_white.png")
 icon = pygame.image.load("sprites/decal/icon.png")
+
+sans_bold = "font/freesansbold.ttf"
 #"surfaces/fade_white.png"
 

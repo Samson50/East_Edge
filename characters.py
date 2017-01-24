@@ -183,194 +183,20 @@ class TextBlock:
         self.result = result
         self.next_text = next_text
 
+default_text = TextBlock(["This is the first line",
+                           "This is the second line",
+                           "This is the third line",
+                           "This is the last line"], [], -1, [])
+
+blocker_text = TextBlock(["Sorry, bro.",
+                           "You can't go this way yet.",
+                           "...",
+                           "..."], [], -1, [])
 
 class Blocker(NPC):
     def __init__(self, x, y, f):
         NPC.__init__(self, cadet_npc, x, y, f, blocker_text)
 
 
-ginger1 = female_white_ginger
-brown1 = female_white_brown
 
-default_text = TextBlock(["This is the first line",
-                           "This is the second line",
-                           "This is the third line",
-                           "This is the last line"], [], -1, [])
 
-text_000 = ["Jake! There are some serious regs",
-            "violations going down in the",
-            "barracks! I know you're just a",
-            "plebe, but some day, you will be a",
-            ##
-            "leader! You will have graduated",
-            "from East Edge! The greatest",
-            "academy in the entire world!",
-            "",
-            ##
-            "So, how will you handle it?",
-            "DCX FLO",
-            "",
-            "",
-            ##
-            ""]
-text_010 = ["Okay, man. That's your decision.",
-            "You made it, now you have to",
-            "stick to it. A good leader is true",
-            "to themselves and isn't afraid",
-            ##
-            "to make unpopular decisions. The",
-            "worst thing you can do is be",
-            "fake. People can smell a fake",
-            "leader from miles away.",
-            ##
-            "CTS 001",
-            "",
-            "",
-            ""]
-
-blocker_text = TextBlock(["Sorry, bro.",
-                           "You can't go this way yet.",
-                           "...",
-                           "..."], [], -1, [])
-basic_blocker = Blocker(32, 64, 1)
-
-blocker_001 = NPC(cadet_npc, 30, 156, 3, blocker_text)
-blocker_002 = NPC(cadet_npc, 162, 156, 2, blocker_text)
-
-# mother_home = NPC(SpritePack(mother),96,96,["Hey, Jake",
-#                                            "Are you excited?",
-#                                            "Ready to go to West Point?",
-#                                            "DCX CTS 000"])
-text_D = ["What?", "What do you still want?", "", ""]
-empty_res = TextBlock(text_D, [], -1, [])
-
-cadet_000 = NPC(white_rh_npc, 258, 96, 1, TextBlock(text_000, choice_0, 0, [
-    TextBlock(text_010, choice_0, -2, [empty_res]),
-    TextBlock(text_010, choice_0, -2, [empty_res]),
-    TextBlock(text_010, choice_0, -2, [empty_res]),
-    TextBlock(text_010, choice_0, -2, [empty_res]),
-]))
-
-text_001 = ["Hey, word spreads fast here. I",
-            "heard what you said to Steve. You",
-            "seem like a cool guy. I'm not",
-            "about to hassle someone like you.",
-            ###
-            "CTS 002",
-            "",
-            "",
-            ""]
-
-text_002 = ["Hey, things get around pretty",
-            "quick here and I heard what you",
-            "said to Steve outside. I get it.",
-            "You want do do the \' right thing\'",
-            ###
-            "You're still full of Kewl-Aid from",
-            "Beast. I know how you feel, wanting",
-            "to make sure that everything is",
-            "Done by the book.",
-            ###
-            "That's what this is, right?",
-            "DCX FLO",
-            "",
-            "",
-            ###
-            ""]
-
-text_003 = ["Hey, I heard you told Steve outside",
-            "that you were going to give everyone",
-            "boards... Obviously you were kidding.",
-            "Nobody is that crazy, right?",
-            ##
-            "Nobody is that crazy, right?",
-            "DCX FLO",
-            "",
-            "",
-            ##
-            ""]
-
-text_301 = ["Dude... what the fuck...",
-            "",
-            "",
-            "",
-            ##
-            "ATK 001",
-            "",
-            "",
-            ""]
-
-text_302 = ["",
-            "",
-            "",
-            ""]
-
-text_004 = ["Fourth", "", "", ""]
-
-text_005 = ["*Sigh* Well... I'm not about to",
-            "just let someone like you walk into",
-            " my company area with an attitude",
-            "like that.",
-            ###
-            "ATK 001",
-            "",
-            "",
-            ""]
-
-text_006 = ["Okay, cool. Just remember that",
-            "you don't have to do everything",
-            "by the book to be a good leader.",
-            "It's about the people.",
-            ##
-            "CTS 002",
-            "",
-            "",
-            ""]
-
-# Create texts 007 - 009
-text_007 = ["Morale response.",
-            "",
-            "",
-            "",
-            ##
-            "CTS 002",
-            "",
-            "",
-            ""]
-
-text_008 = ["Leading response.",
-            "",
-            "",
-            "",
-            ##
-            "CTS 002",
-            "",
-            "",
-            ""]
-
-text_009 = ["Fighting response.",
-            "",
-            "",
-            "",
-            ##
-            "CTS 003",
-            "",
-            "",
-            ""]
-
-cadet_001 = Combatant(black_npc, 34, 64, 1, TextBlock(text_001, choice_0, 0, [
-    TextBlock(text_001, [], 1, [empty_res]),
-    TextBlock(text_002, choice_1, 1, [
-        TextBlock(text_005, [], 2, [
-            TextBlock(text_007, [], 3, [empty_res]),
-            TextBlock(text_008, [], 3, [empty_res]),
-            TextBlock(text_009, [], 3, [empty_res])
-        ]),
-        TextBlock(text_006, [], 2, [empty_res])
-    ]),
-    TextBlock(text_003, [
-        TextBlock(text_301, [], 1, [empty_res]),
-        TextBlock(text_302, [], 1, [empty_res])
-    ], 1, [empty_res]),
-    TextBlock(text_004, [], 1, [empty_res])
-]))

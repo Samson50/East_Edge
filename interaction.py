@@ -1,20 +1,15 @@
-import pygame, sys
-import characters
-import story
 import random
 import room_data
-from pygame.locals import *
-from images import *
 from mini_game import *
-
-
 
 ##== Cut-Scenes ==##
 m_o = [["00:d"]*16+["00:r"]*16+["00:d"]*48+["00:r"]*16+["00:d"]*32+["00:r"]*16+["C:2:64:56"],[]]
 s_00 = [["M:d"]*16+["M:u"]+["00:d"]*16+["00:l"]*82+["00:f:2"]+["R:0:62"], ["R:7:0:62"]]
 s_01 = [["M:r"]*16+["01:d"]*28+["01:r"]*16+["01:d"]*32+["01:l"]*18+["01:f:2"]+["N:15:43"], ["N:4:15:43:32:184"]]
+s_02 = [["01:u"]*16+["01:r"]*8+["R:1:15"], ["R:4:1:15"]]
+s_03 = [["R:1:15"], ["R:4:1:15"]]
 
-cut_scenes = [m_o,s_00,s_01]
+cut_scenes = [m_o, s_00, s_01, s_02, s_03]
 
 
 class TextBox:
@@ -23,7 +18,7 @@ class TextBox:
         self.combat = CombatBox(surface)
         self.text = []
         self.message = ["", "", "", ""]
-        self.font = pygame.font.Font(None, 20)
+        self.font = pygame.font.Font(sans_bold, 14)
         self.text_box = img_text_box
         self.message_marker = 0
         self.decision_marker = 0
@@ -309,7 +304,7 @@ class CombatBox:
         self.text = []
         self.message = ["", "", "", ""]
         self.message_marker = 0
-        self.font = pygame.font.Font(None, 20)
+        self.font = pygame.font.Font(sans_bold, 14)
         self.temp_items = []
         self.mini_game = MiniGame()
         self.mini_map = 0

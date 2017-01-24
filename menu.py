@@ -25,7 +25,6 @@ class Menu:
             self.decision %= 2
             self.surface.blit(menu_play, (30,230))
             self.surface.blit(menu_load, (170,230))
-            (mouse_x, mouse_y) = pygame.mouse.get_pos()
             pygame.display.update()
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -67,6 +66,7 @@ class Menu:
             fpsClock.tick(70)
 
         if self.mode == "Moving":
+            self.room_manager = Room_Manager(ROOMS, fpsClock, self.surface)
             (self.room_manager.room, cadet.x, cadet.y) = self.load_slot()
             return self.play_game(fpsClock, cadet)
 
@@ -97,7 +97,6 @@ class Menu:
 
     def fade_to_white(self, fpsClock):
         counter = 0
-
         while (counter < 30):
             self.fade_white.set_alpha((255/29)*counter)
             self.surface.blit(self.fade_white, (0,0))

@@ -12,7 +12,7 @@ FPS = 70
 
 class Controller(object):
     def __init__(self):
-        self.surface = pygame.display.set_mode((300,300))
+        self.surface = pygame.display.set_mode((300,300))#, HWSURFACE|DOUBLEBUF|RESIZABLE)
         self.mode = "Menu"
         self.menu = Menu(self.surface, fpsClock)
         self.cadet = Player(player_pack,28,16)

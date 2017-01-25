@@ -4,7 +4,7 @@ from mini_game import *
 
 ##== Cut-Scenes ==##
 m_o = [["00:d"]*16+["00:r"]*16+["00:d"]*48+["00:r"]*16+["00:d"]*32+["00:r"]*16+["C:2:64:56"],[]]
-s_00 = [["M:d"]*16+["M:u"]+["00:d"]*16+["00:l"]*82+["00:f:2"]+["R:0:62"], ["R:7:0:62"]]
+s_00 = [["M:d"]*16+["M:u"]+["00:d"]*16+["00:l"]*82+["R:0:62"], ["R:7:0:62"]]
 s_01 = [["M:r"]*16+["01:d"]*28+["01:r"]*16+["01:d"]*32+["01:l"]*18+["01:f:2"]+["N:15:43"], ["N:4:15:43:32:184"]]
 s_02 = [["01:u"]*16+["01:r"]*8+["R:1:15"], ["R:4:1:15"]]
 s_03 = [["R:1:15"], ["R:4:1:15"]]
@@ -18,6 +18,8 @@ class TextBox:
         self.combat = CombatBox(surface)
         self.text = []
         self.message = ["", "", "", ""]
+        self.current_message = ["", "", "", ""]
+        self.current_pointer = 0
         self.font = pygame.font.Font(sans_bold, 14)
         self.text_box = img_text_box
         self.message_marker = 0
@@ -34,7 +36,12 @@ class TextBox:
 
             if event.type == KEYDOWN:
                 if event.key == K_f:
-                    return self.update_message(text_block, cadet)
+                    if self.message[0] == "" and self.message[1] == "" and self.message[2] == "" and self.message[3] == "":
+                        return self.update_message(text_block, cadet)
+                    else:
+                        for i in range(0,4):
+                            self.current_message[i] += self.message[i]
+                            self.message[i] = ""
                 if event.key == K_RIGHT:
                     self.decision_marker += 1
                 if event.key == K_LEFT:
@@ -52,7 +59,13 @@ class TextBox:
         surface.blit(self.text_box, (10, 200))
         delta = 0
         if (not "DCX" in self.message[1]):
-            for line in self.message:
+            if len(self.message[self.current_pointer]) > 0:
+                self.current_message[self.current_pointer] += self.message[self.current_pointer][0]
+                self.message[self.current_pointer] = self.message[self.current_pointer][1:]
+                # Play sound blurb
+            elif self.current_pointer < 3:
+                self.current_pointer += 1
+            for line in self.current_message:
                 text_object = self.font.render(line, 1, (0,0,0))
                 text_rect = text_object.get_rect()
                 text_rect.topleft = (30,210+delta)
@@ -72,6 +85,8 @@ class TextBox:
         pygame.display.update()
 
     def update_message(self, text_block, cadet):
+        self.current_message = ["", "", "", ""]
+        self.current_pointer = 0
         for i in range(0,4):
             if ("DCX" in self.message[i]):
                 if ("CTX" in self.message[i]):

@@ -80,10 +80,12 @@ class NPC:
         self.message = ["", "", "", ""]
 
     def show_base(self):
-        if self.pose == 0:
+        if self.pose < 8:
             return self.sprites.get(0, self.face * 3)
-        elif self.pose < 8:
+        elif self.pose < 16:
             return self.sprites.get(0, self.face * 3 + 1)
+        elif self.pose < 24:
+            return self.sprites.get(0, self.face * 3)
         else:
             return self.sprites.get(0, self.face * 3 + 2)
 
@@ -105,7 +107,7 @@ class NPC:
             if direction == "r":
                 self.x += 2
                 self.face = 3
-            self.pose = self.pose % 16
+            self.pose %= 32
         else:
             if self.just_moved:
                 self.jm_counter += 1
@@ -136,6 +138,7 @@ class NPC:
                 text_box.message = [self.text_block.text[0], self.text_block.text[1], self.text_block.text[2],
                                     self.text_block.text[3]]
                 text_box.message_marker = 4
+                text_box.current_pointer = 0
             mode = text_box.getEvents(self.text_block, cadet)
             text_box.draw_text(surface, self.text_block, backdrop)
             fpsClock.tick(FPS)

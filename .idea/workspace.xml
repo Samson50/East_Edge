@@ -4,9 +4,7 @@
     <list default="true" id="ce2331bb-820d-47d6-8efd-d44cdec143d1" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/characters.py" afterPath="$PROJECT_DIR$/characters.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game.py" afterPath="$PROJECT_DIR$/game.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/interaction.py" afterPath="$PROJECT_DIR$/interaction.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/room_data.py" afterPath="$PROJECT_DIR$/room_data.py" />
     </list>
     <ignored path="East_Edge.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -50,11 +48,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="characters.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="characters.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/characters.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="89" column="56" selection-start-line="89" selection-start-column="56" selection-end-line="89" selection-end-column="56" />
+            <state relative-caret-position="340">
+              <caret line="133" column="36" selection-start-line="133" selection-start-column="36" selection-end-line="133" selection-end-column="36" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -72,11 +70,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="interaction.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="interaction.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/interaction.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="64" column="35" selection-start-line="64" selection-start-column="35" selection-end-line="64" selection-end-column="35" />
+            <state relative-caret-position="646">
+              <caret line="38" column="87" selection-start-line="38" selection-start-column="87" selection-end-line="38" selection-end-column="87" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -182,8 +180,8 @@
         <option value="$PROJECT_DIR$/character_data.py" />
         <option value="$PROJECT_DIR$/game.py" />
         <option value="$PROJECT_DIR$/room_data.py" />
-        <option value="$PROJECT_DIR$/characters.py" />
         <option value="$PROJECT_DIR$/interaction.py" />
+        <option value="$PROJECT_DIR$/characters.py" />
       </list>
     </option>
   </component>
@@ -668,7 +666,14 @@
       <option name="project" value="LOCAL" />
       <updated>1485272573533</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="Created rolling text. Fixed NPC cut-scene animation.">
+      <created>1485315708083</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1485315708083</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -762,7 +767,8 @@
     <MESSAGE value="Reformatted code... again... Is there something wrong with me?" />
     <MESSAGE value="Added option to save to different slots from pause menu. Also, quit from pause menu now returns to main menu." />
     <MESSAGE value="Finished options for Mac_Stairwell" />
-    <option name="LAST_COMMIT_MESSAGE" value="Finished options for Mac_Stairwell" />
+    <MESSAGE value="Created rolling text. Fixed NPC cut-scene animation." />
+    <option name="LAST_COMMIT_MESSAGE" value="Created rolling text. Fixed NPC cut-scene animation." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1163,14 +1169,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/character_data.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="185" column="20" selection-start-line="185" selection-start-column="20" selection-end-line="185" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/room_data.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="466">
@@ -1181,22 +1179,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/characters.py">
+    <entry file="file://$PROJECT_DIR$/character_data.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="89" column="56" selection-start-line="89" selection-start-column="56" selection-end-line="89" selection-end-column="56" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="352">
+          <caret line="185" column="20" selection-start-line="185" selection-start-column="20" selection-end-line="185" selection-end-column="20" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/interaction.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="64" column="35" selection-start-line="64" selection-start-column="35" selection-end-line="64" selection-end-column="35" />
+        <state relative-caret-position="646">
+          <caret line="38" column="87" selection-start-line="38" selection-start-column="87" selection-end-line="38" selection-end-column="87" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/characters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="133" column="36" selection-start-line="133" selection-start-column="36" selection-end-line="133" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
           </folding>
         </state>
       </provider>

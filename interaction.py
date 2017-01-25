@@ -36,12 +36,12 @@ class TextBox:
 
             if event.type == KEYDOWN:
                 if event.key == K_f:
-                    if self.message[0] == "" and self.message[1] == "" and self.message[2] == "" and self.message[3] == "":
-                        return self.update_message(text_block, cadet)
-                    else:
-                        for i in range(0,4):
+                    if self.message != ["", "", "", ""] and "DCX" not in self.message[1]:
+                        for i in range(0, 4):
                             self.current_message[i] += self.message[i]
                             self.message[i] = ""
+                    else:
+                        return self.update_message(text_block, cadet)
                 if event.key == K_RIGHT:
                     self.decision_marker += 1
                 if event.key == K_LEFT:
@@ -109,7 +109,7 @@ class TextBox:
             else:
                 if (self.message_marker == len(text_block.text)):
                     self.message_marker = 0
-                    self.message = ["","","",""]
+                    self.message = ["", "", "", ""]
                     return "Moving"
                 else:
                     if ("CTS" in text_block.text[self.message_marker]):

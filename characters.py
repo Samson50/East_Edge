@@ -131,6 +131,7 @@ class NPC:
         text_box.message = [self.text_block.text[0], self.text_block.text[1], self.text_block.text[2],
                             self.text_block.text[3]]
         text_box.message_marker = 4
+        text_box.current_pointer = 0
         mode = "Talking"
         while (mode == "Talking"):
             if (story.decisions[self.text_block.result] != -1):
